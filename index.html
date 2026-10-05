@@ -206,7 +206,6 @@
             background-color: var(--surface-muted);
         }
 
-        /* Ручний ввід даних */
         #manualEntryModal {
             display: none;
             position: fixed;
@@ -269,7 +268,6 @@
             color: var(--text-main);
         }
 
-        /* Результати */
         #results {
             display: none;
             flex-direction: column;
@@ -393,6 +391,7 @@
                 <p style="color: var(--text-muted); font-size: 0.85rem;">Згенеровано 5 суміщених графіків залежностей</p>
             </div>
             <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <button class="btn-outline" id="toggleCalloutsBtn">Показати виноски</button>
                 <button class="btn-secondary" id="recalcBtn">Повернутись назад</button>
                 <button id="downloadAllBtn">Завантажити всі графіки (PNG)</button>
             </div>
@@ -459,6 +458,7 @@
     let calculatedData = [];
     let currentVariant = 6;
     let isManualMode = false;
+    let showCallouts = false; // За замовчуванням — без виносок (лише точки)
 
     const SUPERSCRIPT_MAP = {
         '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴',
@@ -690,7 +690,7 @@
         ctx.fillStyle = themeColors.bg;
         ctx.fillRect(0, 0, W, H);
 
-        const padLeft = 280;
+        const padLeft = showCallouts ? 280 : 130;
         const padRight = 50;
         const padTop = 100;
         const padBottom = 80;
@@ -704,7 +704,7 @@
             return originX + ((temp - 20) / 80) * (endX - originX - 30);
         }
 
-        // ================= Осі координат та правильні СТРІЛОЧКИ =================
+        // ================= Осі координат та стрілки =================
         ctx.strokeStyle = themeColors.axis;
         ctx.fillStyle = themeColors.axis;
         ctx.lineWidth = 2.5;
@@ -716,7 +716,6 @@
         ctx.lineTo(endX, originY);
         ctx.stroke();
 
-        // Стрілка X (заповнений трикутник)
         ctx.beginPath();
         ctx.moveTo(endX, originY);
         ctx.lineTo(endX - 14, originY - 6);
@@ -724,14 +723,13 @@
         ctx.closePath();
         ctx.fill();
 
-        // 2. Вісь Y (винесена трохи вище точок, щоб стрілка не накладалась)
+        // 2. Вісь Y
         const arrowYTop = endY - 45;
         ctx.beginPath();
         ctx.moveTo(originX, originY);
         ctx.lineTo(originX, arrowYTop);
         ctx.stroke();
 
-        // Стрілка Y (заповнений трикутник)
         ctx.beginPath();
         ctx.moveTo(originX, arrowYTop);
         ctx.lineTo(originX - 6, arrowYTop + 14);
@@ -787,7 +785,6 @@
             let span = maxV - minV;
             if (span === 0) span = maxV || 1;
 
-            // Координата Y для окремої кривої
             function getY(val) {
                 const normalized = (val - minV) / span;
                 return (originY - 20) - normalized * (originY - endY - 45);
@@ -823,24 +820,28 @@
                 ctx.stroke();
             });
 
-            // Виноски до осі Y
-            const ptsToLabel = [points[0], points[4], points[8]];
-            ptsToLabel.forEach(pt => {
-                ctx.strokeStyle = curve.color;
-                ctx.lineWidth = 1;
-                ctx.setLineDash([3, 3]);
-                ctx.beginPath();
-                ctx.moveTo(pt.px, pt.py);
-                ctx.lineTo(originX, pt.py);
-                ctx.stroke();
-                ctx.setLineDash([]);
+            // Виноски до осі Y (будуються лише коли ввімкнено)
+            if (showCallouts) {
+                const ptsToLabel = [points[0], points[4], points[8]];
+                ptsToLabel.forEach(pt => {
+                    ctx.strokeStyle = curve.color;
+                    ctx.lineWidth = 1;
+                    ctx.setLineDash([3, 3]);
+                    ctx.beginPath();
+                    ctx.moveTo(pt.px, pt.py);
+                    ctx.lineTo(originX, pt.py);
+                    ctx.stroke();
+                    ctx.setLineDash([]);
 
-                allLabeledPoints.push(pt);
-            });
+                    allLabeledPoints.push(pt);
+                });
+            }
         });
 
-        // Трасування підписів значень біля осі Y
-        routeAndDrawLabels(ctx, originX, allLabeledPoints);
+        // Трасування підписів біля осі Y
+        if (showCallouts) {
+            routeAndDrawLabels(ctx, originX, allLabeledPoints);
+        }
 
         // Легенда графіка
         const legendX = originX + 20;
@@ -891,7 +892,15 @@
         });
     });
 
-    // Обробники розрахунку за варіантом
+    // Обробник кнопки показу / приховування виносок
+    document.getElementById('toggleCalloutsBtn').addEventListener('click', () => {
+        showCallouts = !showCallouts;
+        const btn = document.getElementById('toggleCalloutsBtn');
+        btn.textContent = showCallouts ? 'Приховати виноски' : 'Показати виноски';
+        renderResults();
+    });
+
+    // Розрахунок за варіантом
     function handleCalculate() {
         const variantInput = document.getElementById('variantInput');
         const val = Number(variantInput.value);

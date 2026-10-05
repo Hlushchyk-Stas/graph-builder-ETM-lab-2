@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Лабораторна робота №2-3 · Суміщені графіки C, tgδ, C·tgδ</title>
+    <title>Лабораторна робота №2 · Суміщені графіки C, tgδ, C·tgδ</title>
     <style>
         :root {
             --bg-color: #f8fafc;
@@ -146,7 +146,7 @@
 
         input[type="number"], input[type="text"] {
             padding: 10px 14px;
-            font-size: 1.1rem;
+            font-size: 1rem;
             border: 2px solid var(--border);
             border-radius: 8px;
             color: var(--text-main);
@@ -360,7 +360,7 @@
 <div class="container">
     <header class="app-header">
         <div class="brand-lockup">
-            <span class="brand-mark">Лаб №2-3</span>
+            <span class="brand-mark">Лаб №2</span>
             <div>
                 <span class="brand-name">Дослідження поляризації та діелектричних втрат</span>
                 <span class="brand-detail">Суміщені графіки: C(t), tgδ(t) та C·tgδ(t)</span>
@@ -379,7 +379,7 @@
             Введіть номер свого варіанта для автоматичного розрахунку або задайте власні табличні дані вручну.
         </p>
         <div class="input-row">
-            <input type="number" id="variantInput" min="1" max="99" value="6" style="width: 120px;" placeholder="Варіант">
+            <input type="number" id="variantInput" min="1" max="99" style="width: 170px;" placeholder="Введіть варіант">
             <button id="calculateBtn">Розрахувати за варіантом</button>
             <button class="btn-outline" id="openManualBtn">Ввести дані вручну</button>
         </div>
@@ -389,7 +389,7 @@
     <main id="results">
         <div class="results-toolbar">
             <div>
-                <h2 id="summaryVariantHeader">Результати для варіанта №6</h2>
+                <h2 id="summaryVariantHeader">Результати розрахунку</h2>
                 <p style="color: var(--text-muted); font-size: 0.85rem;">Згенеровано 5 суміщених графіків залежностей</p>
             </div>
             <div style="display: flex; gap: 10px; flex-wrap: wrap;">
@@ -458,9 +458,9 @@
     ];
 
     let calculatedData = [];
-    let currentVariant = 6;
+    let currentVariant = null;
     let isManualMode = false;
-    let showCallouts = false; // По стандарту — без виносок (лише точки)
+    let showCallouts = false;
 
     const SUPERSCRIPT_MAP = {
         '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴',
@@ -570,7 +570,6 @@
         });
     }
 
-    // Трасування та розведення міток без накладання
     function routeAndDrawLabels(ctx, originX, labeledPoints) {
         if (!labeledPoints || labeledPoints.length === 0) return;
 
@@ -582,7 +581,6 @@
             pt.targetY = pt.py;
         });
 
-        // Плавна релаксація висот
         for (let iter = 0; iter < 25; iter++) {
             for (let i = 0; i < N - 1; i++) {
                 if (sortedY[i + 1].targetY < sortedY[i].targetY + minSpacing) {
@@ -638,7 +636,6 @@
             const targetY = pt.targetY;
             const ptColor = pt.color;
 
-            // Засічка на осі Y
             ctx.strokeStyle = ptColor;
             ctx.lineWidth = 1.5;
             ctx.beginPath();
@@ -709,19 +706,17 @@
             return originX + ((temp - 20) / 80) * (endX - originX - 30);
         }
 
-        // ================= Осі координат та стрілки =================
         ctx.strokeStyle = themeColors.axis;
         ctx.fillStyle = themeColors.axis;
         ctx.lineWidth = 2.5;
         ctx.lineCap = 'round';
 
-        // 1. Вісь X
+        // Вісь X
         ctx.beginPath();
         ctx.moveTo(originX, originY);
         ctx.lineTo(endX, originY);
         ctx.stroke();
 
-        // Стрілка X
         ctx.beginPath();
         ctx.moveTo(endX, originY);
         ctx.lineTo(endX - 14, originY - 6);
@@ -729,14 +724,13 @@
         ctx.closePath();
         ctx.fill();
 
-        // 2. Вісь Y
+        // Вісь Y
         const arrowYTop = endY - 45;
         ctx.beginPath();
         ctx.moveTo(originX, originY);
         ctx.lineTo(originX, arrowYTop);
         ctx.stroke();
 
-        // Стрілка Y
         ctx.beginPath();
         ctx.moveTo(originX, arrowYTop);
         ctx.lineTo(originX - 6, arrowYTop + 14);
@@ -827,14 +821,11 @@
                 ctx.stroke();
             });
 
-            // Виноски до осі Y (якщо увімкнено)
+            // Виноски до осі Y
             if (showCallouts) {
-                // Використовуємо дедуплікацію по висоті та значенню для цієї кривої, 
-                // щоб не було однакових підписів і задвоєнь на осі
                 const uniquePointsMap = new Map();
 
                 points.forEach(pt => {
-                    // Горизонтальний пунктир від точки до осі Y
                     ctx.strokeStyle = curve.color;
                     ctx.lineWidth = 1;
                     ctx.setLineDash([3, 3]);
@@ -856,12 +847,11 @@
             }
         });
 
-        // Трасування підписів значень біля осі Y (якщо увімкнено)
         if (showCallouts) {
             routeAndDrawLabels(ctx, originX, allLabeledPoints);
         }
 
-        // Легенда графіка
+        // Легенда
         const legendX = originX + 20;
         const legendY = endY - 25;
         const legendGap = 200;
@@ -887,7 +877,7 @@
             ctx.fillText(curve.label, lx + 32, legendY);
         });
 
-        // Назва матеріалу внизу
+        // Назва матеріалу
         ctx.fillStyle = themeColors.text;
         ctx.font = 'bold 22px system-ui';
         ctx.textAlign = 'center';
@@ -899,7 +889,7 @@
         const canvas = document.getElementById(`chartCanvas_${idx}`);
         const name = BASE_MATERIALS[idx].name.toLowerCase();
         const link = document.createElement('a');
-        link.download = `variant_${currentVariant}_${name}.png`;
+        link.download = `variant_${currentVariant || 'custom'}_${name}.png`;
         link.href = canvas.toDataURL('image/png');
         link.click();
     }
@@ -910,7 +900,6 @@
         });
     });
 
-    // Перемикач виносок
     document.getElementById('toggleCalloutsBtn').addEventListener('click', () => {
         showCallouts = !showCallouts;
         const btn = document.getElementById('toggleCalloutsBtn');
@@ -918,14 +907,21 @@
         renderResults();
     });
 
-    // Обробники розрахунку за варіантом
     function handleCalculate() {
         const variantInput = document.getElementById('variantInput');
-        const val = Number(variantInput.value);
+        const rawVal = variantInput.value.trim();
+        if (rawVal === '') {
+            alert('Будь ласка, введіть номер варіанта!');
+            variantInput.focus();
+            return;
+        }
+
+        const val = Number(rawVal);
         const minVariant = Number(variantInput.min);
         const maxVariant = Number(variantInput.max);
         if (!Number.isInteger(val) || val < minVariant || val > maxVariant) {
             alert(`Введіть цілий номер варіанта від ${minVariant} до ${maxVariant}.`);
+            variantInput.focus();
             return;
         }
         isManualMode = false;
@@ -958,6 +954,16 @@
     const manualTablesWrapper = document.getElementById('manualTablesWrapper');
 
     document.getElementById('openManualBtn').addEventListener('click', () => {
+        // Якщо розрахунок ще не проводився, ініціалізуємо базовими даними
+        if (!calculatedData || calculatedData.length === 0) {
+            calculatedData = BASE_MATERIALS.map(mat => ({
+                name: mat.name,
+                unitC: mat.unitC,
+                seriesC: [...mat.cStar],
+                seriesTg: mat.tgStar.map(v => v * 1e-4),
+                seriesCtg: mat.cStar.map((c, i) => c * (mat.tgStar[i] * 1e-4))
+            }));
+        }
         buildManualEntryTables();
         manualModal.style.display = 'flex';
     });
@@ -1032,9 +1038,6 @@
         renderResults();
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
-
-    // Початковий розрахунок за замовчуванням
-    performCalculations(6);
 </script>
 </body>
 </html>

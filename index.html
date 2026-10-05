@@ -3,41 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Побудова графіків C·tgδ = f(t)</title>
+    <title>Лабораторна робота №2-3 · Суміщені графіки C, tgδ, C·tgδ</title>
     <style>
         :root {
-            --bg-color: #ffffff;
+            --bg-color: #f8fafc;
             --card-bg: #ffffff;
-            --surface-muted: #f5f8f6;
+            --surface-muted: #f1f5f9;
             --input-bg: #ffffff;
             --primary: #087f6e;
             --primary-hover: #066657;
-            --secondary: #46575a;
-            --secondary-hover: #304346;
-            --text-main: #1c302e;
-            --text-muted: #667875;
-            --border: #dbe7e2;
-            --danger: #ef4444;
-            --success: #10b981;
+            --secondary: #475569;
+            --secondary-hover: #334155;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #cbd5e1;
+            
+            --color-c: #0284c7;
+            --color-tg: #d97706;
+            --color-ctg: #dc2626;
         }
 
         :root[data-theme="dark"] {
             color-scheme: dark;
-            --bg-color: #151a1e;
-            --card-bg: #20272c;
-            --surface-muted: #293238;
-            --input-bg: #171d21;
-            --primary: #67c5b8;
-            --primary-hover: #4eaa9e;
-            --secondary: #52636b;
-            --secondary-hover: #62747c;
-            --text-main: #e8efed;
-            --text-muted: #a5b3b1;
-            --border: #3a474d;
-        }
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --surface-muted: #334155;
+            --input-bg: #0f172a;
+            --primary: #2dd4bf;
+            --primary-hover: #14b8a6;
+            --secondary: #64748b;
+            --secondary-hover: #94a3b8;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #475569;
 
-        :root[data-theme="dark"] body {
-            background-image: linear-gradient(135deg, #182127, #151a1e 55%, #202725);
+            --color-c: #38bdf8;
+            --color-tg: #fbbf24;
+            --color-ctg: #f87171;
         }
 
         * {
@@ -49,409 +51,117 @@
 
         body {
             background-color: var(--bg-color);
-            background-image: none;
             color: var(--text-main);
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
             min-height: 100vh;
-        }
-
-        body.results-shown {
-            justify-content: flex-start;
+            padding-bottom: 70px;
         }
 
         .container {
             width: 100%;
-            max-width: 1400px;
+            max-width: 1320px;
             margin: 0 auto;
-            padding: 0 40px;
+            padding: 0 24px;
         }
 
         .app-header {
-            min-height: 82px;
-            display: grid;
-            grid-template-columns: 1fr auto 1fr;
+            min-height: 80px;
+            display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 24px;
             border-bottom: 1px solid var(--border);
+            margin-bottom: 32px;
         }
 
         .brand-lockup {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 14px;
         }
 
         .brand-mark {
-            color: var(--primary);
-            font-size: 1.08rem;
-            font-weight: 760;
+            background: var(--primary);
+            color: #ffffff;
+            font-size: 1.1rem;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 8px;
+        }
+
+        :root[data-theme="dark"] .brand-mark {
+            color: #0f172a;
         }
 
         .brand-name {
-            color: var(--text-main);
-            font-size: 0.88rem;
+            display: block;
+            font-size: 1.05rem;
             font-weight: 700;
         }
 
         .brand-detail {
             display: block;
-            margin-top: 2px;
             color: var(--text-muted);
-            font-size: 0.75rem;
-        }
-
-        .header-meta {
-            color: var(--text-muted);
-            font-size: 0.82rem;
-        }
-
-        .header-meta strong {
-            color: var(--text-main);
-            font-weight: 650;
-        }
-
-        .theme-toolbar {
-            display: flex;
-            justify-content: flex-end;
-            width: auto;
-            margin: 0;
+            font-size: 0.8rem;
         }
 
         .theme-toggle {
-            display: inline-flex;
-            align-items: center;
-            color: var(--text-main);
             cursor: pointer;
             user-select: none;
-        }
-
-        .workspace {
-            display: grid;
-            grid-template-columns: 205px minmax(360px, 1fr) 290px;
-            align-items: start;
-            gap: 38px;
-            width: 100%;
-            max-width: 1320px;
-            margin: 0 auto;
-            padding: 68px 0 90px;
-        }
-
-        .progress-rail {
-            padding: 9px 24px 0 0;
-            border-right: 1px solid var(--border);
-        }
-
-        .rail-kicker,
-        .input-label,
-        .method-label {
-            color: var(--text-muted);
-            font-size: 0.68rem;
-            font-weight: 750;
-            letter-spacing: 0.1em;
-        }
-
-        .progress-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            gap: 10px;
-            margin: 14px 0 9px;
-            color: var(--text-muted);
-            font-size: 0.82rem;
-        }
-
-        .progress-meta strong {
-            color: var(--text-main);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
             font-size: 0.9rem;
-            font-variant-numeric: tabular-nums;
+            font-weight: 500;
         }
 
-        .progress-rail .progress-bar-container {
-            margin-bottom: 30px;
-        }
-
-        .current-step {
-            padding-top: 18px;
-            border-top: 1px solid var(--border);
-        }
-
-        .status-header {
-            margin-top: 12px;
-            color: var(--text-main);
-            font-size: 1rem;
-            font-weight: 680;
-            line-height: 1.45;
-        }
-
-        .sub-status {
-            margin-top: 6px;
-            color: var(--text-muted);
-            font-size: 0.82rem;
-            line-height: 1.5;
-        }
-
-        .rail-facts {
-            display: flex;
-            flex-direction: column;
-            gap: 7px;
-            margin-top: 34px;
-            color: var(--text-muted);
-            font-size: 0.78rem;
-        }
-
-        .rail-facts span::before {
-            content: '';
-            display: inline-block;
-            width: 6px;
-            height: 6px;
-            margin-right: 9px;
-            border-radius: 50%;
-            background: var(--primary);
-            vertical-align: 1px;
-        }
-
-        .entered-values {
-            margin-top: 26px;
-            padding-top: 17px;
-            border-top: 1px solid var(--border);
-        }
-
-        .entered-values h3 {
-            margin-bottom: 12px;
-            color: var(--text-main);
-            font-size: 0.82rem;
-        }
-
-        .entered-series-list {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-            max-height: 390px;
-            overflow-y: auto;
-            padding-right: 5px;
-        }
-
-        .entered-series h4 {
-            margin-bottom: 5px;
-            color: var(--primary);
-            font-size: 0.76rem;
-            font-weight: 700;
-        }
-
-        .entered-point {
-            display: grid;
-            grid-template-columns: 43px minmax(0, 1fr);
-            gap: 4px;
-            padding: 3px 0;
-            border-bottom: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
-            color: var(--text-muted);
-            font-size: 0.72rem;
-            line-height: 1.4;
-            overflow-wrap: anywhere;
-        }
-
-        .entered-point .editable-value {
-            color: var(--text-main);
-            font-weight: 600;
-        }
-
-        .editable-value {
-            border-bottom: 1px dotted transparent;
-            cursor: pointer;
-        }
-
-        .editable-value:hover,
-        .editable-value:focus-visible {
-            border-bottom-color: var(--primary);
-            outline: none;
-        }
-
-        .inline-value-editor {
-            width: 100%;
-            min-width: 0;
-            padding: 2px 4px;
-            border: 1px solid var(--primary);
-            border-radius: 4px;
-            color: var(--text-main);
-            background: var(--input-bg);
-            font: inherit;
-        }
-
-        .entered-point.is-empty .editable-value {
-            color: var(--text-muted);
-            font-weight: 400;
-        }
-
-        .entry-panel {
+        .card-panel {
             background: var(--card-bg);
             border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 36px;
-            box-shadow: 0 12px 36px -30px rgba(16, 48, 38, 0.34);
+            border-radius: 14px;
+            padding: 32px;
+            max-width: 780px;
+            margin: 0 auto 36px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+            text-align: center;
         }
 
-        .screen-heading {
-            margin-bottom: 30px;
-            text-align: left;
+        .card-panel h1 {
+            font-size: 1.65rem;
+            margin-bottom: 10px;
         }
 
-        .screen-heading .eyebrow {
-            display: block;
-            margin-bottom: 9px;
-            color: var(--primary);
-            font-size: 0.72rem;
-            font-weight: 750;
-            letter-spacing: 0.1em;
+        .card-panel p {
+            color: var(--text-muted);
+            font-size: 0.92rem;
+            margin-bottom: 24px;
+            line-height: 1.55;
         }
 
-        .screen-heading h1 {
-            color: var(--text-main);
-            font-size: 1.85rem;
-            font-weight: 720;
-            line-height: 1.15;
-        }
-
-        .input-label {
-            display: block;
-            margin-bottom: 9px;
-            color: var(--text-main);
-            letter-spacing: 0;
-            font-size: 0.86rem;
-        }
-
-        .progress-bar-container {
-            width: 100%;
-            height: 7px;
-            background-color: var(--border);
-            border-radius: 999px;
-            overflow: hidden;
-        }
-
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary), #46a98a);
-            width: 0%;
-            transition: width 0.35s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-
-        .input-group {
+        .input-row {
             display: flex;
+            justify-content: center;
+            align-items: center;
             gap: 12px;
-            width: 100%;
+            flex-wrap: wrap;
         }
 
-        input[type="text"] {
-            flex: 1;
-            min-width: 0;
-            padding: 14px 17px;
-            font-size: 1.05rem;
-            border: 1.5px solid var(--border);
-            border-radius: 9px;
+        input[type="number"], input[type="text"] {
+            padding: 10px 14px;
+            font-size: 1.1rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
             color: var(--text-main);
             background: var(--input-bg);
             outline: none;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+            transition: border-color 0.2s;
         }
 
-        input[type="text"]:focus {
+        input[type="number"]:focus, input[type="text"]:focus {
             border-color: var(--primary);
-            box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 14%, transparent);
-        }
-
-        .input-hint {
-            margin-top: 9px;
-            color: var(--text-muted);
-            font-size: 0.78rem;
-            line-height: 1.5;
-        }
-
-        .checkbox-container {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin: 0;
-            color: var(--text-main);
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .settings-panel {
-            display: flex;
-            justify-content: center;
-            margin: 24px 0 0;
-            padding: 14px 18px;
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            background: var(--surface-muted);
-        }
-
-        .switch-control {
-            position: relative;
-            display: inline-flex;
-            align-items: center;
-            gap: 11px;
-            color: var(--text-main);
-            font-size: 0.94rem;
-            font-weight: 620;
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .switch-control input[type="checkbox"] {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            opacity: 0;
-        }
-
-        .switch-track {
-            position: relative;
-            flex: 0 0 auto;
-            width: 48px;
-            height: 28px;
-            border: 1px solid #c5d2cd;
-            border-radius: 999px;
-            background: #dce5e1;
-            transition: background-color 0.24s ease, border-color 0.24s ease, box-shadow 0.24s ease;
-        }
-
-        .switch-thumb {
-            position: absolute;
-            top: 3px;
-            left: 3px;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: #ffffff;
-            box-shadow: 0 1px 4px rgba(18, 42, 35, 0.24);
-            transition: transform 0.28s cubic-bezier(0.2, 0.85, 0.25, 1.25);
-        }
-
-        .switch-control input:checked + .switch-track {
-            border-color: var(--primary);
-            background: var(--primary);
-        }
-
-        .switch-control input:checked + .switch-track .switch-thumb {
-            transform: translateX(20px);
-        }
-
-        .switch-control input:focus-visible + .switch-track {
-            outline: 3px solid color-mix(in srgb, var(--primary) 28%, transparent);
-            outline-offset: 3px;
-        }
-
-        .switch-control:active .switch-thumb {
-            width: 23px;
         }
 
         button {
-            padding: 12px 20px;
-            font-size: 1rem;
+            padding: 11px 20px;
+            font-size: 0.95rem;
             font-weight: 600;
             background-color: var(--primary);
             color: white;
@@ -465,16 +175,21 @@
             gap: 6px;
         }
 
+        :root[data-theme="dark"] button {
+            color: #0f172a;
+        }
+
         button:hover {
             background-color: var(--primary-hover);
         }
 
         button:active {
-            transform: scale(0.99);
+            transform: scale(0.98);
         }
 
         button.btn-secondary {
             background-color: var(--secondary);
+            color: #ffffff;
         }
 
         button.btn-secondary:hover {
@@ -491,405 +206,152 @@
             background-color: var(--surface-muted);
         }
 
-        .actions-row {
-            display: flex;
-            justify-content: flex-start;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 24px;
-            padding-top: 22px;
-            border-top: 1px solid var(--border);
-        }
-
-        .method-label {
-            width: 100%;
-            margin-bottom: 2px;
-        }
-
-        .guide-rail {
-            padding: 8px 0 0 24px;
-            border-left: 1px solid var(--border);
-        }
-
-        .tutorial-panel summary {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 16px;
-            color: var(--text-main);
-            font-size: 0.98rem;
-            font-weight: 700;
-            cursor: pointer;
-            list-style: none;
-        }
-
-        .tutorial-panel summary::-webkit-details-marker {
+        /* Ручний ввід даних */
+        #manualEntryModal {
             display: none;
-        }
-
-        .tutorial-panel summary::after {
-            content: '+';
-            color: var(--primary);
-            font-size: 1.2rem;
-            font-weight: 400;
-            transition: transform 0.2s ease;
-        }
-
-        .tutorial-panel[open] summary::after {
-            content: '\2212';
-        }
-
-        .guide-intro {
-            margin: 12px 0 20px;
-            color: var(--text-muted);
-            font-size: 0.82rem;
-            line-height: 1.55;
-        }
-
-        .guide-steps {
-            display: flex;
-            flex-direction: column;
-            gap: 18px;
-            list-style: none;
-        }
-
-        .guide-step {
-            display: grid;
-            grid-template-columns: 27px 1fr;
-            gap: 10px;
-        }
-
-        .guide-index {
-            color: var(--primary);
-            font-size: 0.72rem;
-            font-weight: 750;
-            font-variant-numeric: tabular-nums;
-            padding-top: 2px;
-        }
-
-        .guide-step strong {
-            display: block;
-            margin-bottom: 4px;
-            color: var(--text-main);
-            font-size: 0.82rem;
-        }
-
-        .guide-step p {
-            color: var(--text-muted);
-            font-size: 0.78rem;
-            line-height: 1.55;
-        }
-
-        .algorithm-note {
-            margin-top: 20px;
-            padding-top: 14px;
-            border-top: 1px solid var(--border);
-            color: var(--text-muted);
-            font-size: 0.76rem;
-            line-height: 1.55;
-        }
-
-        .current-summary {
-            margin-top: 24px;
-            padding-top: 16px;
-            border-top: 1px dashed var(--border);
-            font-size: 0.9rem;
-            color: var(--text-muted);
-        }
-
-        .points-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 8px;
-        }
-
-        .point-tag {
-            background: var(--surface-muted);
-            border: 1px solid var(--border);
-            padding: 4px 10px;
-            border-radius: 6px;
-            color: var(--text-main);
-            font-size: 0.85rem;
-        }
-
-        .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(15, 23, 42, 0.6);
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.55);
             backdrop-filter: blur(4px);
-            display: none;
-            align-items: center;
+            z-index: 1000;
             justify-content: center;
-            z-index: 100;
-            padding: 16px;
+            align-items: center;
+            padding: 20px;
         }
 
-        .modal-content {
+        .modal-box {
             background: var(--card-bg);
             border-radius: 14px;
+            border: 1px solid var(--border);
             width: 100%;
-            max-width: 650px;
+            max-width: 1050px;
             max-height: 90vh;
             overflow-y: auto;
-            padding: 24px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            padding: 26px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
         }
 
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
         }
 
-        .modal-header h3 {
-            font-size: 1.25rem;
-            color: var(--text-main);
-        }
-
-        .close-btn {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            color: var(--text-muted);
-            cursor: pointer;
-            padding: 4px 8px;
-        }
-
-        .close-btn:hover {
-            color: var(--text-main);
-            background: none;
-        }
-
-        .tab-switch {
-            display: flex;
-            background: var(--surface-muted);
-            border-radius: 8px;
-            padding: 4px;
-            gap: 4px;
-            margin-bottom: 16px;
-        }
-
-        .tab-btn {
-            flex: 1;
-            padding: 8px 12px;
-            background: transparent;
-            color: var(--text-muted);
-            border-radius: 6px;
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        .tab-btn.active {
-            background: var(--card-bg);
-            color: var(--primary);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-
-        textarea {
+        .manual-table {
             width: 100%;
-            padding: 12px;
-            font-size: 0.95rem;
-            font-family: monospace;
-            border: 2px solid var(--border);
-            border-radius: 8px;
-            color: var(--text-main);
-            background: var(--input-bg);
-            outline: none;
-            resize: vertical;
-        }
-
-        textarea:focus {
-            border-color: var(--primary);
-        }
-
-        .hint-box {
-            background: var(--surface-muted);
-            border-left: 4px solid var(--primary);
-            padding: 10px 14px;
+            border-collapse: collapse;
             font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-bottom: 14px;
-            line-height: 1.4;
+            margin-bottom: 20px;
         }
 
-        .grid-5-tables {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
+        .manual-table th, .manual-table td {
+            border: 1px solid var(--border);
+            padding: 6px;
+            text-align: center;
         }
 
-        .temperature-entry {
-            display: grid;
-            grid-template-columns: 58px minmax(0, 1fr);
-            gap: 8px;
-            align-items: start;
+        .manual-table th {
+            background: var(--surface-muted);
         }
 
-        .temperature-gutter {
-            display: flex;
-            flex-direction: column;
-            padding: 12px 0;
-            color: var(--text-muted);
-            font-family: monospace;
-            font-size: 0.82rem;
-            line-height: 1.5rem;
+        .manual-table input {
+            width: 100%;
+            padding: 6px;
+            font-size: 0.85rem;
             text-align: right;
-            user-select: none;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background: var(--input-bg);
+            color: var(--text-main);
         }
 
-        .temperature-entry textarea {
-            display: block;
-            min-height: 0;
-            line-height: 1.5rem;
-            white-space: pre;
-            overflow-wrap: normal;
-            overflow-x: auto;
-        }
-
-        .combined-chart-list {
-            max-height: 48vh;
-            overflow-y: auto;
-            padding-right: 5px;
-        }
-
-        .combined-gutter span:nth-child(9n + 1) {
-            color: var(--primary);
-            font-weight: 700;
-        }
-
-        .separate-chart-entry {
-            min-width: 0;
-        }
-
-        @media (max-width: 600px) {
-            .grid-5-tables {
-                grid-template-columns: 1fr;
-            }
-
-            .grid-5-tables > .separate-chart-entry[style*="grid-column"] {
-                grid-column: auto !important;
-            }
-
-            .screen-heading h1 {
-                font-size: 1.75rem;
-            }
-
-            .input-group {
-                flex-direction: column;
-            }
-
-            #nextBtn {
-                width: 100%;
-            }
-        }
-
+        /* Результати */
         #results {
             display: none;
-            width: 100%;
-            max-width: 1050px;
-            margin: 0 auto;
             flex-direction: column;
-            gap: 32px;
+            gap: 36px;
         }
 
-        @media (max-width: 1100px) {
-            .workspace {
-                grid-template-columns: 185px minmax(0, 1fr);
-                gap: 30px;
-            }
-
-            .guide-rail {
-                grid-column: 2;
-                padding: 20px 0 0;
-                border-left: 0;
-                border-top: 1px solid var(--border);
-            }
-        }
-
-        @media (max-width: 720px) {
-            .container {
-                padding: 0 18px;
-            }
-
-            .app-header {
-                min-height: 72px;
-                grid-template-columns: 1fr auto;
-                gap: 12px;
-            }
-
-            .header-meta {
-                display: none;
-            }
-
-            .workspace {
-                grid-template-columns: minmax(0, 1fr);
-                gap: 26px;
-                padding: 32px 0 56px;
-            }
-
-            .progress-rail {
-                padding: 0 0 18px;
-                border-right: 0;
-                border-bottom: 1px solid var(--border);
-            }
-
-            .progress-rail .progress-bar-container {
-                margin-bottom: 17px;
-            }
-
-            .current-step {
-                padding-top: 14px;
-            }
-
-            .rail-facts {
-                flex-direction: row;
-                flex-wrap: wrap;
-                gap: 8px 18px;
-                margin-top: 16px;
-            }
-
-            .entry-panel {
-                padding: 26px 22px;
-            }
-
-            .guide-rail {
-                grid-column: 1;
-                padding: 19px 0 0;
-                border-top: 1px solid var(--border);
-            }
+        .results-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 14px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 18px 24px;
         }
 
         .chart-card {
             background: var(--card-bg);
+            border: 1px solid var(--border);
             border-radius: 14px;
             padding: 22px;
-            border: 1px solid var(--border);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-        }
-
-        .chart-header {
+            box-shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.05);
             display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            margin-bottom: 16px;
+            flex-direction: column;
+            gap: 16px;
         }
 
-        .download-all-btn {
-            align-self: center;
+        .chart-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .chart-card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
         }
 
         canvas {
             width: 100%;
             height: auto;
-            max-height: 580px;
-            background: var(--card-bg);
-            border-radius: 8px;
+            max-height: 640px;
             border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--card-bg);
+        }
+
+        details.calc-table-wrapper {
+            background: var(--surface-muted);
+            border-radius: 8px;
+            padding: 12px 18px;
+            font-size: 0.88rem;
+        }
+
+        details.calc-table-wrapper summary {
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--primary);
+            user-select: none;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            font-size: 0.82rem;
+            text-align: right;
+        }
+
+        .data-table th, .data-table td {
+            border: 1px solid var(--border);
+            padding: 7px 10px;
+        }
+
+        .data-table th {
+            background: var(--card-bg);
+            font-weight: 600;
+            text-align: center;
         }
     </style>
 </head>
@@ -898,266 +360,105 @@
 <div class="container">
     <header class="app-header">
         <div class="brand-lockup">
-            <span class="brand-mark">C·tgδ</span>
-            <span>
-                <span class="brand-name">ПОБУДОВА ГРАФІКІВ</span>
-                <span class="brand-detail">Залежність від температури</span>
-            </span>
+            <span class="brand-mark">Лаб №2-3</span>
+            <div>
+                <span class="brand-name">Дослідження поляризації та діелектричних втрат</span>
+                <span class="brand-detail">Суміщені графіки: C(t), tgδ(t) та C·tgδ(t)</span>
+            </div>
         </div>
-        <div class="header-meta"><strong>5 матеріалів</strong> · 45 вимірювань</div>
-        <div class="theme-toolbar">
-            <label class="theme-toggle switch-control">
-                <input type="checkbox" id="themeCheckbox" aria-label="Увімкнути темну тему">
-                <span class="switch-track" aria-hidden="true"><span class="switch-thumb"></span></span>
-                <span>Темна тема</span>
-            </label>
-        </div>
+        <label class="theme-toggle">
+            <input type="checkbox" id="themeCheckbox">
+            <span>Темна тема</span>
+        </label>
     </header>
 
-    <div class="workspace" id="inputCard">
-        <aside class="progress-rail" aria-label="Прогрес вимірювань">
-            <div class="rail-kicker">ПРОГРЕС РОБОТИ</div>
-            <div class="progress-meta">
-                <span>Введено значень</span>
-                <strong id="progressCount">0 / 45</strong>
-            </div>
-            <div class="progress-bar-container">
-                <div class="progress-bar" id="progressBar"></div>
-            </div>
-            <div class="current-step">
-                <div class="rail-kicker">ПОТОЧНИЙ КРОК</div>
-                <div class="status-header" id="statusHeader">Графік 1 · Склотекстоліт</div>
-                <p class="sub-status" id="subStatus">Температура 20°C · вимірювання 1 з 9</p>
-            </div>
-            <div class="rail-facts">
-                <span>5 матеріалів</span>
-                <span>9 температур, 20°–100°</span>
-            </div>
-            <section class="entered-values" aria-label="Введені значення">
-                <h3>Введені значення</h3>
-                <div class="entered-series-list" id="enteredSeriesList"></div>
-            </section>
-        </aside>
-
-        <main class="entry-panel">
-            <div class="screen-heading">
-                <span class="eyebrow">ВИМІРЮВАННЯ</span>
-                <h1>C·tgδ = f(t)</h1>
-            </div>
-
-            <label class="input-label" for="valueInput">Значення C·tgδ</label>
-            <div class="input-group">
-                <input type="text" id="valueInput" placeholder="Наприклад: 0.0000000124 або 1.24e-8" autofocus autocomplete="off">
-                <button id="nextBtn">Додати значення</button>
-            </div>
-            <p class="input-hint">Підтримуються звичайний запис і наукова нотація, наприклад 1.24e-8.</p>
-
-            <div class="settings-panel">
-                <label class="checkbox-container switch-control">
-                    <input type="checkbox" id="roundCheckbox" checked>
-                    <span class="switch-track" aria-hidden="true"><span class="switch-thumb"></span></span>
-                    <span>Округляти до сотих</span>
-                </label>
-            </div>
-
-            <div class="actions-row">
-                <span class="method-label">АБО ВВЕДІТЬ ДАНІ ІНШИМ СПОСОБОМ</span>
-                <button class="btn-outline" id="openBulkModalBtn">Ввести списком</button>
-                <button class="btn-secondary" id="fillDemoBtn" title="Заповнити форму згенерованими даними">Рандомні дані</button>
-                <button class="btn-secondary" id="backBtn" style="visibility: hidden;">Назад</button>
-            </div>
-
-            <div class="current-summary" id="currentSummary" style="display: none;">
-                <div>Вже введено для поточного графіка:</div>
-                <div class="points-list" id="pointsList"></div>
-            </div>
-        </main>
-
-        <aside class="guide-rail">
-            <details class="tutorial-panel" open>
-                <summary>Як працює алгоритм</summary>
-                <p class="guide-intro">Введіть дев’ять значень для кожного матеріалу або скористайтеся пакетним вводом.</p>
-                <ol class="guide-steps">
-                    <li class="guide-step">
-                        <span class="guide-index">01</span>
-                        <div><strong>Вхідні дані</strong><p>П’ять матеріалів, по дев’ять вимірювань від 20° до 100° з кроком 10°.</p></div>
-                    </li>
-                    <li class="guide-step">
-                        <span class="guide-index">02</span>
-                        <div><strong>Координати точок</strong><p>Температура задає положення по горизонталі, значення C·tgδ — по вертикалі. Для однакових значень підпис на осі Y створюється один раз.</p></div>
-                    </li>
-                    <li class="guide-step">
-                        <span class="guide-index">03</span>
-                        <div><strong>Розведення підписів</strong><p>Підписи сортуються за висотою. Алгоритм зберігає їхній порядок і розносить щонайменше на 18 px, щоб зменшити накладання.</p></div>
-                    </li>
-                    <li class="guide-step">
-                        <span class="guide-index">04</span>
-                        <div><strong>Лінії-виноски</strong><p>Близькі мітки групуються; їхні ламані лінії отримують різні точки перегину, щоб зменшити перетини та полегшити читання.</p></div>
-                    </li>
-                    <li class="guide-step">
-                        <span class="guide-index">05</span>
-                        <div><strong>Результат</strong><p>Для кожного матеріалу будується окремий графік із проєкціями та маркерами. Графіки можна зберегти окремо або разом.</p></div>
-                    </li>
-                </ol>
-                <p class="algorithm-note">Округлення змінює лише підписи значень; вихідні дані для побудови графіка залишаються точними.</p>
-            </details>
-        </aside>
-    </div>
-
-    <div id="results">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-            <h2>Побудовані графіки залежності C·tgδ = f(t)</h2>
-            <button onclick="location.reload()" class="btn-secondary">Почати спочатку</button>
+    <!-- ПАНЕЛЬ ВИБОРУ СПОСОБУ ВВЕДЕННЯ -->
+    <section class="card-panel" id="variantCard">
+        <h1>Побудова графіків за варіантом</h1>
+        <p>
+            Введіть номер свого варіанта для автоматичного розрахунку або задайте власні табличні дані вручну.
+        </p>
+        <div class="input-row">
+            <input type="number" id="variantInput" min="1" max="99" value="6" style="width: 120px;" placeholder="Варіант">
+            <button id="calculateBtn">Розрахувати за варіантом</button>
+            <button class="btn-outline" id="openManualBtn">Ввести дані вручну</button>
         </div>
-    </div>
+    </section>
+
+    <!-- РЕЗУЛЬТАТИ -->
+    <main id="results">
+        <div class="results-toolbar">
+            <div>
+                <h2 id="summaryVariantHeader">Результати для варіанта №6</h2>
+                <p style="color: var(--text-muted); font-size: 0.85rem;">Згенеровано 5 суміщених графіків залежностей</p>
+            </div>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <button class="btn-secondary" id="recalcBtn">Повернутись назад</button>
+                <button id="downloadAllBtn">Завантажити всі графіки (PNG)</button>
+            </div>
+        </div>
+
+        <div id="chartsContainer" style="display: flex; flex-direction: column; gap: 32px;"></div>
+    </main>
 </div>
 
-<div class="modal-overlay" id="bulkModal">
-    <div class="modal-content">
+<!-- МОДАЛЬНЕ ВІКНО РУЧНОГО ВВЕДЕННЯ ДАНИХ -->
+<div id="manualEntryModal">
+    <div class="modal-box">
         <div class="modal-header">
-            <h3>Введення значень списком</h3>
-            <button class="close-btn" id="closeModalBtn">&times;</button>
+            <h3>Ручне редагування значень C та tgδ</h3>
+            <button class="btn-secondary" id="closeManualBtn" style="padding: 4px 10px;">✕</button>
         </div>
-
-        <div class="tab-switch">
-            <button class="tab-btn" id="tabAllBtn">Усі разом (45 значень)</button>
-            <button class="tab-btn active" id="tabSeparateBtn">Окремі таблиці</button>
-        </div>
-
-        <div id="viewAllInOne" style="display: none;">
-            <div class="hint-box">
-                Заповніть таблиці послідовно: по 9 значень для кожного матеріалу. Температури позначені зліва від полів.
-            </div>
-            <div class="combined-chart-list">
-                <div class="temperature-entry">
-                    <div class="temperature-gutter combined-gutter" aria-hidden="true"></div>
-                    <textarea id="bulkAllText" rows="45" aria-label="45 значень для всіх графіків" placeholder="Введіть 45 значень по одному в рядок"></textarea>
-                </div>
-            </div>
-            <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 6px;" id="countHelper">
-                Введено значень: 0 / 45
-            </div>
-        </div>
-
-        <div id="viewSeparate">
-            <div class="hint-box">
-                Введіть по одному значенню в рядок. Позначки температури зліва відповідають рядкам полів.
-            </div>
-            <div class="grid-5-tables">
-                <div class="separate-chart-entry">
-                    <label style="font-size: 0.85rem; font-weight: 600;">Графік 1 · Склотекстоліт</label>
-                    <div class="temperature-entry"><div class="temperature-gutter" aria-hidden="true"></div><textarea class="separate-input" data-idx="0" rows="9" aria-label="Значення для графіка Склотекстоліт" placeholder="9 значень"></textarea></div>
-                </div>
-                <div class="separate-chart-entry">
-                    <label style="font-size: 0.85rem; font-weight: 600;">Графік 2 · Слюда</label>
-                    <div class="temperature-entry"><div class="temperature-gutter" aria-hidden="true"></div><textarea class="separate-input" data-idx="1" rows="9" aria-label="Значення для графіка Слюда" placeholder="9 значень"></textarea></div>
-                </div>
-                <div class="separate-chart-entry">
-                    <label style="font-size: 0.85rem; font-weight: 600;">Графік 3 · Папір</label>
-                    <div class="temperature-entry"><div class="temperature-gutter" aria-hidden="true"></div><textarea class="separate-input" data-idx="2" rows="9" aria-label="Значення для графіка Папір" placeholder="9 значень"></textarea></div>
-                </div>
-                <div class="separate-chart-entry">
-                    <label style="font-size: 0.85rem; font-weight: 600;">Графік 4 · Фторопласт-4</label>
-                    <div class="temperature-entry"><div class="temperature-gutter" aria-hidden="true"></div><textarea class="separate-input" data-idx="3" rows="9" aria-label="Значення для графіка Фторопласт-4" placeholder="9 значень"></textarea></div>
-                </div>
-                <div class="separate-chart-entry" style="grid-column: span 2;">
-                    <label style="font-size: 0.85rem; font-weight: 600;">Графік 5 · Кераміка</label>
-                    <div class="temperature-entry"><div class="temperature-gutter" aria-hidden="true"></div><textarea class="separate-input" data-idx="4" rows="9" aria-label="Значення для графіка Кераміка" placeholder="9 значень"></textarea></div>
-                </div>
-            </div>
-        </div>
-
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
-            <label class="checkbox-container switch-control">
-                <input type="checkbox" id="modalRoundCheckbox" checked>
-                <span class="switch-track" aria-hidden="true"><span class="switch-thumb"></span></span>
-                <span>Округляти до сотих</span>
-            </label>
-            <div style="display: flex; gap: 10px;">
-                <button class="btn-secondary" id="cancelModalBtn">Скасувати</button>
-                <button id="applyBulkBtn">Побудувати всі 5 графіків</button>
-            </div>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">
+            Ви можете змінити базові або розраховані значення для кожного матеріалу. За замовчуванням завантажено поточні табличні дані.
+        </p>
+        <div id="manualTablesWrapper"></div>
+        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px;">
+            <button class="btn-secondary" id="cancelManualBtn">Скасувати</button>
+            <button id="applyManualBtn">Побудувати з цими даними</button>
         </div>
     </div>
 </div>
 
 <script>
-    const TOTAL_CHARTS = 5;
     const TEMPS = [20, 30, 40, 50, 60, 70, 80, 90, 100];
-    const TOTAL_POINTS_PER_CHART = TEMPS.length;
-    const TOTAL_ALL_POINTS = TOTAL_CHARTS * TOTAL_POINTS_PER_CHART;
 
-    const CHART_NAMES = [
-        "Склотекстоліт",
-        "Слюда",
-        "Папір",
-        "Фторопласт-4",
-        "Кераміка"
+    const BASE_MATERIALS = [
+        {
+            name: "Склотекстоліт",
+            unitC: "pF",
+            cStar: [465, 469, 472, 474, 477, 478, 480, 482, 485],
+            tgStar: [56, 51, 49, 48, 45, 42, 40, 45, 56]
+        },
+        {
+            name: "Слюда",
+            unitC: "pF",
+            cStar: [8412, 8408, 8400, 8382, 8341, 8274, 8173, 8100, 8067],
+            tgStar: [3, 3, 4, 16, 32, 57, 82, 121, 157]
+        },
+        {
+            name: "Папір",
+            unitC: "µF",
+            cStar: [0.18, 0.18, 0.18, 0.18, 0.18, 0.18, 0.18, 0.19, 0.19],
+            tgStar: [93, 83, 75, 68, 62, 57, 52, 48, 48]
+        },
+        {
+            name: "Фторопласт-4",
+            unitC: "µF",
+            cStar: [0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02],
+            tgStar: [0, 0, 0, 0, 0, 0, 0, 1, 1]
+        },
+        {
+            name: "Кераміка",
+            unitC: "pF",
+            cStar: [107, 107, 106, 106, 105, 105, 105, 104, 104],
+            tgStar: [4, 4, 5, 6, 9, 12, 21, 36, 58]
+        }
     ];
 
-    let allData = Array.from(
-        { length: TOTAL_CHARTS },
-        () => Array(TOTAL_POINTS_PER_CHART).fill(null)
-    );
-    let currentChartIdx = 0;
-    let currentPointIdx = 0;
-
-    const statusHeader = document.getElementById('statusHeader');
-    const valueInput = document.getElementById('valueInput');
-    const nextBtn = document.getElementById('nextBtn');
-    const backBtn = document.getElementById('backBtn');
-    const fillDemoBtn = document.getElementById('fillDemoBtn');
-    const progressBar = document.getElementById('progressBar');
-    const progressCount = document.getElementById('progressCount');
-    const inputCard = document.getElementById('inputCard');
-    const resultsBlock = document.getElementById('results');
-    const pointsList = document.getElementById('pointsList');
-    const currentSummary = document.getElementById('currentSummary');
-    const roundCheckbox = document.getElementById('roundCheckbox');
-    const modalRoundCheckbox = document.getElementById('modalRoundCheckbox');
-    const themeCheckbox = document.getElementById('themeCheckbox');
-
-    const openBulkModalBtn = document.getElementById('openBulkModalBtn');
-    const bulkModal = document.getElementById('bulkModal');
-    const closeModalBtn = document.getElementById('closeModalBtn');
-    const cancelModalBtn = document.getElementById('cancelModalBtn');
-    const tabAllBtn = document.getElementById('tabAllBtn');
-    const tabSeparateBtn = document.getElementById('tabSeparateBtn');
-    const viewAllInOne = document.getElementById('viewAllInOne');
-    const viewSeparate = document.getElementById('viewSeparate');
-    const bulkAllText = document.getElementById('bulkAllText');
-    const countHelper = document.getElementById('countHelper');
-    const applyBulkBtn = document.getElementById('applyBulkBtn');
-    const enteredSeriesList = document.getElementById('enteredSeriesList');
-
-    let activeModalTab = 'separate';
-
-    document.querySelectorAll('.temperature-gutter').forEach(gutter => {
-        const temperatures = gutter.classList.contains('combined-gutter')
-            ? Array.from({ length: TOTAL_CHARTS }, () => TEMPS).flat()
-            : TEMPS;
-        temperatures.forEach(temp => {
-            const label = document.createElement('span');
-            label.textContent = `${temp}° -`;
-            gutter.appendChild(label);
-        });
-    });
-
-    themeCheckbox.addEventListener('change', () => {
-        document.documentElement.dataset.theme = themeCheckbox.checked ? 'dark' : 'light';
-        if (resultsBlock.style.display === 'flex') reRenderAll();
-    });
-
-    roundCheckbox.addEventListener('change', () => {
-        modalRoundCheckbox.checked = roundCheckbox.checked;
-        if (resultsBlock.style.display === 'flex') reRenderAll();
-        else updateUI();
-    });
-    modalRoundCheckbox.addEventListener('change', () => {
-        roundCheckbox.checked = modalRoundCheckbox.checked;
-        if (resultsBlock.style.display === 'flex') reRenderAll();
-        else updateUI();
-    });
+    let calculatedData = [];
+    let currentVariant = 6;
+    let isManualMode = false;
 
     const SUPERSCRIPT_MAP = {
         '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴',
@@ -1169,625 +470,121 @@
         return str.split('').map(ch => SUPERSCRIPT_MAP[ch] || ch).join('');
     }
 
-    function formatScientificDisplay(num, rawStr = '', round = false) {
-        let str = (rawStr || '').trim().replace(',', '.');
-        let mVal, expVal;
-
-        if (/[eE][+-]?\d+/.test(str)) {
-            let [mantissa, exponent] = str.split(/[eE]/);
-            mVal = parseFloat(mantissa);
-            expVal = parseInt(exponent, 10);
-        } else {
-            const absNum = Math.abs(num);
-            if (num !== 0 && (absNum < 0.01 || absNum >= 10000)) {
-                let expStr = num.toExponential();
-                let [mantissa, exponent] = expStr.split('e');
-                mVal = parseFloat(mantissa);
-                expVal = parseInt(exponent, 10);
-            } else {
-                mVal = num;
-                expVal = 0;
-            }
+    function formatDisplayNumber(num) {
+        if (num === 0) return "0";
+        const absNum = Math.abs(num);
+        if (absNum >= 0.01 && absNum < 10000) {
+            return (+(Math.round(num + "e+2") + "e-2")).toString().replace('.', ',');
         }
-
-        if (round) {
-            mVal = +(Math.round(mVal + "e+2") + "e-2");
-        }
-
-        const formattedMantissa = mVal.toString().replace('.', ',');
-
-        if (expVal === 0 || isNaN(expVal)) {
-            return formattedMantissa;
-        }
-
-        const formattedExp = toSuperscript(expVal.toString());
-        return `${formattedMantissa}*10${formattedExp}`;
+        let [m, exp] = num.toExponential(2).split('e');
+        let mVal = (+(Math.round(parseFloat(m) + "e+2") + "e-2")).toString().replace('.', ',');
+        return `${mVal}*10${toSuperscript(parseInt(exp, 10).toString())}`;
     }
 
-    function findNextPoint() {
-        for (let chartIdx = 0; chartIdx < TOTAL_CHARTS; chartIdx++) {
-            const pointIdx = allData[chartIdx].findIndex(item => !item);
-            if (pointIdx !== -1) return { chartIdx, pointIdx };
-        }
-        return { chartIdx: TOTAL_CHARTS, pointIdx: 0 };
-    }
+    function performCalculations(variant) {
+        currentVariant = variant;
+        const kC = 1 - 0.01 * variant;
+        const kTg = (1 + 0.01 * variant) * 1e-4;
 
-    function hasAllValues() {
-        return allData.every(series => series.every(Boolean));
-    }
+        calculatedData = BASE_MATERIALS.map(mat => {
+            const seriesC = [];
+            const seriesTg = [];
+            const seriesCtg = [];
 
-    function createEditableValue(chartIdx, pointIdx, item, text) {
-        const value = document.createElement('span');
-        value.className = 'editable-value';
-        value.tabIndex = 0;
-        value.setAttribute('role', 'button');
-        value.setAttribute('aria-label', `Редагувати ${CHART_NAMES[chartIdx]}, ${TEMPS[pointIdx]}°C`);
-        value.dataset.chartIdx = chartIdx;
-        value.dataset.pointIdx = pointIdx;
-        value.textContent = text;
-        return value;
-    }
+            for (let i = 0; i < TEMPS.length; i++) {
+                const cVal = mat.cStar[i] * kC;
+                const tgVal = mat.tgStar[i] * kTg;
+                const ctgVal = cVal * tgVal;
 
-    function updateUI(focusInput = true) {
-        const nextPoint = findNextPoint();
-        currentChartIdx = nextPoint.chartIdx;
-        currentPointIdx = nextPoint.pointIdx;
-
-        const chartNum = currentChartIdx + 1;
-        const chartName = CHART_NAMES[currentChartIdx] || '';
-        const pointNum = currentPointIdx + 1;
-        const currentTemp = TEMPS[currentPointIdx];
-
-        statusHeader.textContent = `Графік ${chartNum} · ${chartName}`;
-        subStatus.textContent = `Температура ${currentTemp}°C · вимірювання ${pointNum} з ${TOTAL_POINTS_PER_CHART}`;
-
-        const completedTotal = allData.flat().filter(Boolean).length;
-        progressCount.textContent = `${completedTotal} / ${TOTAL_ALL_POINTS}`;
-        progressBar.style.width = ((completedTotal / TOTAL_ALL_POINTS) * 100) + '%';
-        backBtn.style.visibility = (completedTotal > 0) ? 'visible' : 'hidden';
-
-        const currSeries = allData[currentChartIdx];
-        if (currSeries && currSeries.some(Boolean)) {
-            currentSummary.style.display = 'block';
-            pointsList.replaceChildren();
-            currSeries.forEach((item, idx) => {
-                if (!item) return;
-                const tag = document.createElement('span');
-                tag.className = 'point-tag';
-                tag.append(`${TEMPS[idx]}°: `);
-                tag.appendChild(createEditableValue(
-                    currentChartIdx,
-                    idx,
-                    item,
-                    formatScientificDisplay(item.num, item.raw, roundCheckbox.checked)
-                ));
-                pointsList.appendChild(tag);
-            });
-        } else {
-            currentSummary.style.display = 'none';
-            pointsList.replaceChildren();
-        }
-
-        renderEnteredValues();
-
-        valueInput.value = '';
-        if (focusInput) valueInput.focus();
-    }
-
-    function renderEnteredValues() {
-        enteredSeriesList.replaceChildren();
-
-        CHART_NAMES.forEach((chartName, chartIdx) => {
-            const series = document.createElement('section');
-            series.className = 'entered-series';
-
-            const heading = document.createElement('h4');
-            heading.textContent = `Графік ${chartIdx + 1} · ${chartName}`;
-            series.appendChild(heading);
-
-            TEMPS.forEach((temp, pointIdx) => {
-                const item = allData[chartIdx][pointIdx];
-                const row = document.createElement('div');
-                row.className = `entered-point${item ? '' : ' is-empty'}`;
-
-                const temperature = document.createElement('span');
-                temperature.textContent = `${temp}°`;
-
-                const editableValue = createEditableValue(
-                    chartIdx,
-                    pointIdx,
-                    item,
-                    item ? formatScientificDisplay(item.num, item.raw, roundCheckbox.checked) : '—'
-                );
-
-                row.append(temperature, editableValue);
-                series.appendChild(row);
-            });
-
-            enteredSeriesList.appendChild(series);
-        });
-    }
-
-    function beginInlineEdit(valueElement) {
-        if (valueElement.querySelector('input')) return;
-
-        const { chartIdx, pointIdx } = valueElement.dataset;
-        const item = allData[Number(chartIdx)][Number(pointIdx)];
-        const input = document.createElement('input');
-        input.className = 'inline-value-editor';
-        input.type = 'text';
-        input.inputMode = 'decimal';
-        input.value = item ? item.raw : '';
-        input.setAttribute('aria-label', valueElement.getAttribute('aria-label'));
-        input.dataset.chartIdx = chartIdx;
-        input.dataset.pointIdx = pointIdx;
-        input.dataset.originalValue = input.value;
-        input.addEventListener('keydown', event => {
-            if (event.key === 'Enter') input.blur();
-            if (event.key === 'Escape') {
-                input.value = input.dataset.originalValue;
-                input.dataset.cancelEdit = 'true';
-                input.blur();
-            }
-        });
-        input.addEventListener('blur', () => {
-            if (input.dataset.cancelEdit === 'true') {
-                updateUI(false);
-                return;
+                seriesC.push(cVal);
+                seriesTg.push(tgVal);
+                seriesCtg.push(ctgVal);
             }
 
-            const raw = input.value.trim().replace(',', '.');
-            const num = Number(raw);
-            if (raw !== '' && !Number.isFinite(num)) {
-                alert('Введено некоректне число!');
-                input.focus();
-                return;
-            }
-
-            allData[Number(input.dataset.chartIdx)][Number(input.dataset.pointIdx)] = raw === ''
-                ? null
-                : { num, raw };
-
-            if (hasAllValues()) finishAndRender();
-            else updateUI(false);
-        });
-
-        valueElement.replaceWith(input);
-        input.focus();
-        input.select();
-    }
-
-    [enteredSeriesList, pointsList].forEach(container => {
-        container.addEventListener('click', event => {
-            const valueElement = event.target.closest('.editable-value');
-            if (valueElement && container.contains(valueElement)) beginInlineEdit(valueElement);
-        });
-        container.addEventListener('keydown', event => {
-            if (event.target.matches('input')) return;
-            const valueElement = event.target.closest('.editable-value');
-            if (valueElement && (event.key === 'Enter' || event.key === ' ')) {
-                event.preventDefault();
-                beginInlineEdit(valueElement);
-            }
-        });
-    });
-
-    function addCurrentValue() {
-        let rawVal = valueInput.value.trim().replace(',', '.');
-        if (rawVal === '') {
-            alert('Будь ласка, введіть числове значення!');
-            return;
-        }
-
-        const numVal = parseFloat(rawVal);
-        if (isNaN(numVal)) {
-            alert('Введено некоректне число!');
-            return;
-        }
-
-        allData[currentChartIdx][currentPointIdx] = {
-            num: numVal,
-            raw: rawVal
-        };
-
-        if (hasAllValues()) {
-            finishAndRender();
-        } else {
-            updateUI();
-        }
-    }
-
-    function stepBack() {
-        for (let chartIdx = TOTAL_CHARTS - 1; chartIdx >= 0; chartIdx--) {
-            const pointIdx = allData[chartIdx].findLastIndex(item => item);
-            if (pointIdx !== -1) {
-                allData[chartIdx][pointIdx] = null;
-                break;
-            }
-        }
-        updateUI();
-    }
-
-    // РАНДОМНІ ТЕСТОВІ ДАНІ ПРИ КОЖНОМУ НАТИСКАННІ
-    function fillDemo() {
-        allData = Array.from(
-            { length: TOTAL_CHARTS },
-            () => Array(TOTAL_POINTS_PER_CHART).fill(null)
-        );
-        
-        for (let c = 0; c < TOTAL_CHARTS; c++) {
-            const isRising = c === 1 || Math.random() > 0.6;
-            
-            if (isRising) {
-                const base = +( (Math.random() * 2 + 1.5).toFixed(2) );
-                const scale = Math.random() * 80 + 40;
-                for (let p = 0; p < TOTAL_POINTS_PER_CHART; p++) {
-                    let val;
-                    if (p < 2) {
-                        val = base;
-                    } else {
-                        val = base + Math.pow(p / (TOTAL_POINTS_PER_CHART - 1), 2.8) * scale;
-                    }
-                    const raw = val.toFixed(2);
-                    allData[c][p] = { num: parseFloat(raw), raw: raw };
-                }
-            } else {
-                const expPower = Math.random() > 0.5 ? 3 : 4;
-                const startM = Math.random() * 0.8 + 1.4;
-                const endM = Math.random() * 0.4 + 0.6;
-                
-                for (let p = 0; p < TOTAL_POINTS_PER_CHART; p++) {
-                    let m;
-                    if (p >= 7) {
-                        m = endM;
-                    } else {
-                        const progress = p / 7;
-                        m = startM - (startM - endM) * Math.pow(progress, 0.75);
-                    }
-                    const raw = (m * Math.pow(10, -expPower)).toExponential(2);
-                    allData[c][p] = { num: parseFloat(raw), raw: raw };
-                }
-            }
-        }
-        finishAndRender();
-    }
-
-    openBulkModalBtn.addEventListener('click', () => {
-        bulkModal.style.display = 'flex';
-        document.querySelector('.separate-input').focus();
-    });
-
-    function closeBulkModal() {
-        bulkModal.style.display = 'none';
-    }
-
-    closeModalBtn.addEventListener('click', closeBulkModal);
-    cancelModalBtn.addEventListener('click', closeBulkModal);
-
-    tabAllBtn.addEventListener('click', () => {
-        activeModalTab = 'all';
-        tabAllBtn.classList.add('active');
-        tabSeparateBtn.classList.remove('active');
-        viewAllInOne.style.display = 'block';
-        viewSeparate.style.display = 'none';
-        bulkAllText.focus();
-    });
-
-    tabSeparateBtn.addEventListener('click', () => {
-        activeModalTab = 'separate';
-        tabSeparateBtn.classList.add('active');
-        tabAllBtn.classList.remove('active');
-        viewAllInOne.style.display = 'none';
-        viewSeparate.style.display = 'block';
-        document.querySelector('.separate-input').focus();
-    });
-
-    bulkAllText.addEventListener('input', updateCombinedCount);
-
-    function updateCombinedCount() {
-        const count = parseRawNumbers(bulkAllText.value).length;
-        countHelper.textContent = `Введено значень: ${count} / 45`;
-        countHelper.style.color = (count === TOTAL_ALL_POINTS) ? 'var(--success)' : 'var(--text-muted)';
-    }
-
-    function parseRawNumbers(str) {
-        return str
-            .split(/[\r\n]+/)
-            .map(s => s.trim().replace(',', '.'))
-            .filter(s => s !== '' && !isNaN(parseFloat(s)))
-            .map(s => ({
-                num: parseFloat(s),
-                raw: s
-            }));
-    }
-
-    applyBulkBtn.addEventListener('click', () => {
-        if (activeModalTab === 'all') {
-            const items = parseRawNumbers(bulkAllText.value);
-            if (items.length < TOTAL_ALL_POINTS) {
-                alert(`Ви ввели ${items.length} значень. Потрібно рівно 45 (по 9 значень на 5 графіків).`);
-                bulkAllText.focus();
-                return;
-            }
-
-            allData = Array.from({ length: TOTAL_CHARTS }, (_, chartIdx) =>
-                items.slice(chartIdx * TOTAL_POINTS_PER_CHART, (chartIdx + 1) * TOTAL_POINTS_PER_CHART)
-            );
-        } else {
-            const separateData = [];
-            for (let i = 0; i < TOTAL_CHARTS; i++) {
-                const textarea = document.querySelector(`.separate-input[data-idx="${i}"]`);
-                let items = parseRawNumbers(textarea.value);
-                if (items.length < 9) {
-                    alert(`У графіку #${i + 1} (${CHART_NAMES[i]}) введено лише ${items.length} значень із 9 потрібних.`);
-                    return;
-                }
-                separateData.push(items.slice(0, 9));
-            }
-            allData = separateData;
-        }
-
-        closeBulkModal();
-        finishAndRender();
-    });
-
-    function finishAndRender() {
-        document.body.classList.add('results-shown');
-        inputCard.style.display = 'none';
-        resultsBlock.style.display = 'flex';
-        reRenderAll();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function reRenderAll() {
-        const header = resultsBlock.firstElementChild;
-        resultsBlock.innerHTML = '';
-        resultsBlock.appendChild(header);
-
-        const shouldRound = roundCheckbox.checked;
-        allData.forEach((series, idx) => {
-            createChartCanvas(idx, series, shouldRound);
-        });
-
-        const downloadAllBtn = document.createElement('button');
-        downloadAllBtn.className = 'download-all-btn';
-        downloadAllBtn.textContent = 'Завантажити всі графіки';
-        downloadAllBtn.addEventListener('click', downloadAllCharts);
-        resultsBlock.appendChild(downloadAllBtn);
-    }
-
-    function downloadCanvas(canvas, filename) {
-        const link = document.createElement('a');
-        link.download = filename;
-        link.href = canvas.toDataURL('image/png');
-        link.click();
-    }
-
-    function downloadAllCharts() {
-        const canvases = resultsBlock.querySelectorAll('.chart-card canvas');
-        canvases.forEach((canvas, idx) => {
-            const filename = `${CHART_NAMES[idx].toLowerCase().replace(/[^a-zа-яіїєґ0-9]/gi, '_')}.png`;
-            window.setTimeout(() => downloadCanvas(canvas, filename), idx * 180);
+            return {
+                name: mat.name,
+                unitC: mat.unitC,
+                seriesC,
+                seriesTg,
+                seriesCtg
+            };
         });
     }
 
-    function createChartCanvas(chartIdx, items, shouldRound) {
-        const chartName = CHART_NAMES[chartIdx] || `Графік ${chartIdx + 1}`;
-        const card = document.createElement('div');
-        card.className = 'chart-card';
+    function renderResults() {
+        const container = document.getElementById('chartsContainer');
+        container.innerHTML = '';
+        document.getElementById('summaryVariantHeader').textContent = isManualMode 
+            ? 'Результати розрахунку (ручне введення)' 
+            : `Результати для варіанта №${currentVariant}`;
 
-        const header = document.createElement('div');
-        header.className = 'chart-header';
+        calculatedData.forEach((mat, idx) => {
+            const card = document.createElement('div');
+            card.className = 'chart-card';
 
-        const dlBtn = document.createElement('button');
-        dlBtn.className = 'btn-secondary';
-        dlBtn.style.fontSize = '0.85rem';
-        dlBtn.style.padding = '6px 14px';
-        dlBtn.textContent = 'Зберегти як PNG';
+            const header = document.createElement('div');
+            header.className = 'chart-card-header';
+            header.innerHTML = `
+                <div class="chart-card-title">${idx + 1}. ${mat.name}</div>
+                <button class="btn-secondary" style="font-size: 0.85rem; padding: 6px 14px;" onclick="downloadSingleCanvas(${idx})">Зберегти PNG</button>
+            `;
+            card.appendChild(header);
 
-        header.appendChild(dlBtn);
-        card.appendChild(header);
+            const canvas = document.createElement('canvas');
+            canvas.width = 1150;
+            canvas.height = 640;
+            canvas.id = `chartCanvas_${idx}`;
+            card.appendChild(canvas);
 
-        const canvas = document.createElement('canvas');
-        canvas.width = 1050;
-        canvas.height = 580;
-        card.appendChild(canvas);
-        resultsBlock.appendChild(card);
+            const details = document.createElement('details');
+            details.className = 'calc-table-wrapper';
+            let tableRows = TEMPS.map((t, i) => `
+                <tr>
+                    <td style="text-align: center;">${t}°C</td>
+                    <td>${formatDisplayNumber(mat.seriesC[i])}</td>
+                    <td>${formatDisplayNumber(mat.seriesTg[i])}</td>
+                    <td>${formatDisplayNumber(mat.seriesCtg[i])}</td>
+                </tr>
+            `).join('');
 
-        dlBtn.onclick = () => {
-            const filename = `${chartName.toLowerCase().replace(/[^a-zа-яіїєґ0-9]/gi, '_')}.png`;
-            downloadCanvas(canvas, filename);
-        };
+            details.innerHTML = `
+                <summary>Показати числові дані (${mat.name})</summary>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>t, °C</th>
+                            <th>Ємність C (${mat.unitC})</th>
+                            <th>tgδ</th>
+                            <th>C · tgδ</th>
+                        </tr>
+                    </thead>
+                    <tbody>${tableRows}</tbody>
+                </table>
+            `;
+            card.appendChild(details);
 
-        drawGraph(canvas, items, shouldRound, chartName);
+            container.appendChild(card);
+            drawCombinedGraph(canvas, mat);
+        });
     }
 
-    function drawGraph(canvas, items, shouldRound, chartName) {
-        const ctx = canvas.getContext('2d');
-        const W = canvas.width;
-        const H = canvas.height;
-        const isDark = document.documentElement.dataset.theme === 'dark';
-        const colors = isDark ? {
-            background: '#20272c',
-            axis: '#d6e0dd',
-            grid: '#526168',
-            tickText: '#c7d3d0',
-            labelText: '#e8efed',
-            callout: '#9aaba8',
-            line: '#c7d3d0',
-            markerFill: '#f87171',
-            markerStroke: '#fecaca'
-        } : {
-            background: '#ffffff',
-            axis: '#000000',
-            grid: '#94a3b8',
-            tickText: '#1e293b',
-            labelText: '#0f172a',
-            callout: '#64748b',
-            line: '#1e293b',
-            markerFill: '#dc2626',
-            markerStroke: '#7f1d1d'
-        };
+    function routeAndDrawLabels(ctx, originX, labeledPoints) {
+        if (!labeledPoints || labeledPoints.length === 0) return;
 
-        const padLeft = 265;
-        const padRight = 55;
-        const padTop = 60;
-        const padBottom = 105;
-
-        const originX = padLeft;
-        const originY = H - padBottom;
-        const endX = W - padRight;
-        const endY = padTop;
-
-        ctx.fillStyle = colors.background;
-        ctx.fillRect(0, 0, W, H);
-
-        const rawNums = items.map(it => it.num);
-        const minVal = Math.min(...rawNums);
-        const maxVal = Math.max(...rawNums);
-        
-        let yAxisMin = Math.min(0, minVal);
-        let yAxisMax = maxVal <= 0 ? 1 : maxVal * 1.15;
-        if (yAxisMin === yAxisMax) {
-            yAxisMax += (yAxisMax === 0 ? 1 : Math.abs(yAxisMax) * 0.2);
-        }
-
-        function getX(temp) {
-            return originX + (temp / 100) * (endX - originX - 30);
-        }
-
-        function getY(val) {
-            return originY - ((val - yAxisMin) / (yAxisMax - yAxisMin)) * (originY - endY);
-        }
-
-        // 1. Осі зі стрілками
-        ctx.strokeStyle = colors.axis;
-        ctx.lineWidth = 2.5;
-        ctx.lineCap = 'round';
-        ctx.lineJoin = 'miter';
-
-        // Вісь X
-        ctx.beginPath();
-        ctx.moveTo(originX, originY);
-        ctx.lineTo(endX, originY);
-        ctx.stroke();
-
-        // Стрілка X
-        ctx.beginPath();
-        ctx.moveTo(endX - 14, originY - 6);
-        ctx.lineTo(endX, originY);
-        ctx.lineTo(endX - 14, originY + 6);
-        ctx.stroke();
-
-        // Вісь Y
-        ctx.beginPath();
-        ctx.moveTo(originX, originY);
-        ctx.lineTo(originX, endY - 20);
-        ctx.stroke();
-
-        // Стрілка Y
-        ctx.beginPath();
-        ctx.moveTo(originX - 6, endY - 8);
-        ctx.lineTo(originX, endY - 22);
-        ctx.lineTo(originX + 6, endY - 8);
-        ctx.stroke();
-
-        // Підписи осей
-        ctx.fillStyle = colors.axis;
-        ctx.font = 'bold 20px system-ui';
-        ctx.textAlign = 'right';
-        ctx.fillText('t, °C', endX, originY + 45);
-
-        ctx.textAlign = 'center';
-        ctx.fillText('C · tgδ', originX, endY - 32);
-
-        ctx.textAlign = 'right';
-        ctx.fillText('0', originX - 12, originY + 20);
-
-        // =========================================================================
-        // 2. ФІЛЬТРАЦІЯ ТОЧОК ТА ПУНКТИРНІ ПРОЄКЦІЇ
-        // =========================================================================
-        const uniqueYMap = new Map();
-        items.forEach((it, idx) => {
-            const key = it.num.toPrecision(7);
-            uniqueYMap.set(key, {
-                idx: idx,
-                num: it.num,
-                raw: it.raw,
-                py: getY(it.num),
-                px: getX(TEMPS[idx]),
-                text: formatScientificDisplay(it.num, it.raw, shouldRound)
-            });
-        });
-
-        ctx.lineWidth = 1.2;
-        ctx.strokeStyle = colors.grid;
-        ctx.setLineDash([5, 5]);
-
-        // Вертикальні пунктири від усіх точок
-        items.forEach((it, idx) => {
-            const px = getX(TEMPS[idx]);
-            const py = getY(it.num);
-            ctx.beginPath();
-            ctx.moveTo(px, py);
-            ctx.lineTo(px, originY);
-            ctx.stroke();
-        });
-
-        // Горизонтальні пунктири лише до унікальних точок
-        uniqueYMap.forEach(pt => {
-            ctx.beginPath();
-            ctx.moveTo(pt.px, pt.py);
-            ctx.lineTo(originX, pt.py);
-            ctx.stroke();
-        });
-
-        ctx.setLineDash([]);
-
-        // 3. Мітки на осі X (температура)
-        ctx.fillStyle = colors.tickText;
-        ctx.font = '13px system-ui';
-
-        items.forEach((_, idx) => {
-            const t = TEMPS[idx];
-            const px = getX(t);
-            ctx.textAlign = 'center';
-            ctx.fillText(t + '°', px, originY + 22);
-
-            ctx.beginPath();
-            ctx.moveTo(px, originY - 3);
-            ctx.lineTo(px, originY + 3);
-            ctx.strokeStyle = colors.axis;
-            ctx.lineWidth = 1.5;
-            ctx.stroke();
-        });
-
-        // =========================================================================
-        // 4. ТОПОЛОГІЧНИЙ АЛГОРИТМ БЕЗПЕРЕТИННОГО ТРАСУВАННЯ ЛІНІЙ (PLANAR ROUTING)
-        // =========================================================================
-        const fontSize = 13;
-        ctx.font = `${fontSize}px system-ui`;
-        const minSpacing = 18; // Безпечна мінімальна висота рядка між сусідніми мітками
-
-        // Сортуємо точки строго зверху вниз (py від найменшого до найбільшого)
-        const sortedY = Array.from(uniqueYMap.values()).sort((a, b) => a.py - b.py);
+        const minSpacing = 16;
+        const sortedY = [...labeledPoints].sort((a, b) => a.py - b.py);
         const N = sortedY.length;
 
-        // Ініціалізуємо цільові висоти
         sortedY.forEach(pt => {
             pt.targetY = pt.py;
-            pt.textWidth = ctx.measureText(pt.text).width;
         });
 
-        // 1. Монотонна силова релаксація з суворим збереженням порядку (targetY_i <= targetY_{i+1} - minSpacing)
         for (let iter = 0; iter < 25; iter++) {
-            // Прохід вниз: гарантуємо мінімальний зазор
             for (let i = 0; i < N - 1; i++) {
                 if (sortedY[i + 1].targetY < sortedY[i].targetY + minSpacing) {
                     sortedY[i + 1].targetY = sortedY[i].targetY + minSpacing;
                 }
             }
-            // Прохід вгору: підтягуємо назад до рідних координат
             for (let i = N - 1; i > 0; i--) {
                 if (sortedY[i - 1].targetY > sortedY[i].targetY - minSpacing) {
                     sortedY[i - 1].targetY = sortedY[i].targetY - minSpacing;
@@ -1795,29 +592,14 @@
             }
         }
 
-        // Обмежуємо габарити полотна
-        const bottomLimit = originY + 2;
-        const topLimit = endY + 10;
-        let shiftUp = sortedY[N - 1].targetY - bottomLimit;
-        if (shiftUp > 0) {
-            sortedY.forEach(pt => pt.targetY -= shiftUp);
-        }
-        let shiftDown = topLimit - sortedY[0].targetY;
-        if (shiftDown > 0) {
-            sortedY.forEach(pt => pt.targetY += shiftDown);
-        }
-
-        // 2. Виділення неперервних зв'язаних кластерів зміщення
         const clusters = [];
         let currCluster = [];
-
-        sortedY.forEach((pt, i) => {
+        sortedY.forEach(pt => {
             pt.isShifted = Math.abs(pt.targetY - pt.py) > 1.5;
             if (currCluster.length === 0) {
                 currCluster.push(pt);
             } else {
                 const prev = currCluster[currCluster.length - 1];
-                // Якщо між точками тісно на осі Y або в розведеному стані — вони в одній групі трасування
                 if (Math.abs(pt.py - prev.py) < minSpacing * 1.3 || Math.abs(pt.targetY - prev.targetY) < minSpacing * 1.1) {
                     currCluster.push(pt);
                 } else {
@@ -1828,24 +610,16 @@
         });
         if (currCluster.length > 0) clusters.push(currCluster);
 
-        // 3. Розрахунок геометрії точок перегину (Knee Coordinates) без взаємного перетину ліній
         clusters.forEach(cluster => {
             const cLen = cluster.length;
             if (cLen === 1 && !cluster[0].isShifted) {
                 cluster[0].useStraight = true;
                 return;
             }
-
-            // Щоб лінії віяла ніколи не перетиналися при відхиленні вгору чи вниз:
-            // чим сильніше точка зміщена, тим далі вліво виноситься її точка зламу (staggering)
             cluster.forEach((pt, cIdx) => {
                 pt.useStraight = false;
-
-                // Базові координати
-                const baseStub = 10; // пряма ділянка від осі вліво
+                const baseStub = 10;
                 const spreadProgress = cLen > 1 ? cIdx / (cLen - 1) : 0.5;
-
-                // Ступінчасте розташування колін для унеможливлення перетину похилих сегментів
                 const kneeDistance = 24 + (spreadProgress * 28);
                 const shelfDistance = 58 + ((1 - spreadProgress) * 20);
 
@@ -1855,33 +629,28 @@
             });
         });
 
-        // 4. Відмальовування
         sortedY.forEach(pt => {
             const py = pt.py;
             const targetY = pt.targetY;
+            const ptColor = pt.color;
 
-            // Засічка безпосередньо на осі Y
-            ctx.strokeStyle = colors.axis;
+            ctx.strokeStyle = ptColor;
             ctx.lineWidth = 1.5;
             ctx.beginPath();
             ctx.moveTo(originX - 3, py);
             ctx.lineTo(originX + 3, py);
             ctx.stroke();
 
-            ctx.fillStyle = colors.labelText;
+            ctx.fillStyle = ptColor;
             ctx.textAlign = 'right';
             ctx.textBaseline = 'middle';
+            ctx.font = 'bold 11px system-ui';
 
             if (pt.useStraight) {
-                // Пряма одинарна виноска
-                const textRightX = originX - 10;
-                ctx.fillText(pt.text, textRightX, py);
+                ctx.fillText(pt.text, originX - 10, py);
             } else {
-                // Безперетинна віялова лінія з монотонним коліном
-                const textRightX = pt.x3 - 8;
-
-                ctx.strokeStyle = colors.callout;
-                ctx.lineWidth = 1.2;
+                ctx.strokeStyle = ptColor;
+                ctx.lineWidth = 1.1;
                 ctx.beginPath();
                 ctx.moveTo(originX - 3, py);
                 ctx.lineTo(pt.x1, py);
@@ -1889,59 +658,356 @@
                 ctx.lineTo(pt.x3, targetY);
                 ctx.stroke();
 
-                // Текст розташований строго лівіше від кінця горизонтальної полички
-                ctx.fillText(pt.text, textRightX, targetY);
+                ctx.fillText(pt.text, pt.x3 - 6, targetY);
             }
         });
+    }
 
-        // 5. Лінія графіку
-        ctx.strokeStyle = colors.line;
-        ctx.lineWidth = 3;
+    function drawCombinedGraph(canvas, data) {
+        const ctx = canvas.getContext('2d');
+        const W = canvas.width;
+        const H = canvas.height;
+        const isDark = document.documentElement.dataset.theme === 'dark';
+
+        const themeColors = isDark ? {
+            bg: '#1e293b',
+            axis: '#e2e8f0',
+            grid: '#475569',
+            text: '#f8fafc',
+            c: '#38bdf8',
+            tg: '#fbbf24',
+            ctg: '#f87171'
+        } : {
+            bg: '#ffffff',
+            axis: '#0f172a',
+            grid: '#cbd5e1',
+            text: '#0f172a',
+            c: '#0284c7',
+            tg: '#d97706',
+            ctg: '#dc2626'
+        };
+
+        ctx.fillStyle = themeColors.bg;
+        ctx.fillRect(0, 0, W, H);
+
+        const padLeft = 280;
+        const padRight = 50;
+        const padTop = 100;
+        const padBottom = 80;
+
+        const originX = padLeft;
+        const originY = H - padBottom;
+        const endX = W - padRight;
+        const endY = padTop;
+
+        function getX(temp) {
+            return originX + ((temp - 20) / 80) * (endX - originX - 30);
+        }
+
+        // ================= Осі координат та правильні СТРІЛОЧКИ =================
+        ctx.strokeStyle = themeColors.axis;
+        ctx.fillStyle = themeColors.axis;
+        ctx.lineWidth = 2.5;
+        ctx.lineCap = 'round';
+
+        // 1. Вісь X
         ctx.beginPath();
-        items.forEach((it, idx) => {
-            const px = getX(TEMPS[idx]);
-            const py = getY(it.num);
-            if (idx === 0) {
-                ctx.moveTo(px, py);
-            } else {
-                ctx.lineTo(px, py);
-            }
-        });
+        ctx.moveTo(originX, originY);
+        ctx.lineTo(endX, originY);
         ctx.stroke();
 
-        // 6. Маркери точок
-        items.forEach((it, idx) => {
-            const px = getX(TEMPS[idx]);
-            const py = getY(it.num);
+        // Стрілка X (заповнений трикутник)
+        ctx.beginPath();
+        ctx.moveTo(endX, originY);
+        ctx.lineTo(endX - 14, originY - 6);
+        ctx.lineTo(endX - 14, originY + 6);
+        ctx.closePath();
+        ctx.fill();
+
+        // 2. Вісь Y (винесена трохи вище точок, щоб стрілка не накладалась)
+        const arrowYTop = endY - 45;
+        ctx.beginPath();
+        ctx.moveTo(originX, originY);
+        ctx.lineTo(originX, arrowYTop);
+        ctx.stroke();
+
+        // Стрілка Y (заповнений трикутник)
+        ctx.beginPath();
+        ctx.moveTo(originX, arrowYTop);
+        ctx.lineTo(originX - 6, arrowYTop + 14);
+        ctx.lineTo(originX + 6, arrowYTop + 14);
+        ctx.closePath();
+        ctx.fill();
+
+        // Підписи осей
+        ctx.font = 'bold 18px system-ui';
+        ctx.textAlign = 'right';
+        ctx.fillText('t, °C', endX, originY + 44);
+        ctx.textAlign = 'center';
+        ctx.fillText('Параметри матеріалу', originX, arrowYTop - 18);
+        ctx.textAlign = 'right';
+        ctx.fillText('0', originX - 14, originY + 18);
+
+        // Вертикальні лінії сітки та позначки температури
+        TEMPS.forEach(t => {
+            const px = getX(t);
+            ctx.strokeStyle = themeColors.grid;
+            ctx.lineWidth = 1;
+            ctx.setLineDash([4, 4]);
+            ctx.beginPath();
+            ctx.moveTo(px, originY);
+            ctx.lineTo(px, endY);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            ctx.fillStyle = themeColors.axis;
+            ctx.font = '13px system-ui';
+            ctx.textAlign = 'center';
+            ctx.fillText(`${t}°`, px, originY + 22);
 
             ctx.beginPath();
-            ctx.arc(px, py, 6, 0, Math.PI * 2);
-            ctx.fillStyle = colors.markerFill;
-            ctx.fill();
-            ctx.lineWidth = 1.5;
-            ctx.strokeStyle = colors.markerStroke;
+            ctx.moveTo(px, originY - 4);
+            ctx.lineTo(px, originY + 4);
             ctx.stroke();
         });
 
-        // 7. Підпис назви матеріалу по центру знизу
-        const plotCenterX = originX + (endX - originX) / 2;
-        ctx.fillStyle = colors.labelText;
+        // 3 залежності
+        const curves = [
+            { label: `C (${data.unitC})`, values: data.seriesC, color: themeColors.c },
+            { label: 'tgδ', values: data.seriesTg, color: themeColors.tg },
+            { label: 'C·tgδ', values: data.seriesCtg, color: themeColors.ctg }
+        ];
+
+        const allLabeledPoints = [];
+
+        curves.forEach((curve) => {
+            const vals = curve.values;
+            const minV = Math.min(...vals);
+            const maxV = Math.max(...vals);
+            let span = maxV - minV;
+            if (span === 0) span = maxV || 1;
+
+            // Координата Y для окремої кривої
+            function getY(val) {
+                const normalized = (val - minV) / span;
+                return (originY - 20) - normalized * (originY - endY - 45);
+            }
+
+            const points = vals.map((v, i) => ({
+                t: TEMPS[i],
+                val: v,
+                px: getX(TEMPS[i]),
+                py: getY(v),
+                text: formatDisplayNumber(v),
+                color: curve.color
+            }));
+
+            // Лінія кривої
+            ctx.strokeStyle = curve.color;
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            points.forEach((pt, i) => {
+                if (i === 0) ctx.moveTo(pt.px, pt.py);
+                else ctx.lineTo(pt.px, pt.py);
+            });
+            ctx.stroke();
+
+            // Точки
+            points.forEach(pt => {
+                ctx.beginPath();
+                ctx.arc(pt.px, pt.py, 5.5, 0, Math.PI * 2);
+                ctx.fillStyle = curve.color;
+                ctx.fill();
+                ctx.lineWidth = 1.5;
+                ctx.strokeStyle = themeColors.bg;
+                ctx.stroke();
+            });
+
+            // Виноски до осі Y
+            const ptsToLabel = [points[0], points[4], points[8]];
+            ptsToLabel.forEach(pt => {
+                ctx.strokeStyle = curve.color;
+                ctx.lineWidth = 1;
+                ctx.setLineDash([3, 3]);
+                ctx.beginPath();
+                ctx.moveTo(pt.px, pt.py);
+                ctx.lineTo(originX, pt.py);
+                ctx.stroke();
+                ctx.setLineDash([]);
+
+                allLabeledPoints.push(pt);
+            });
+        });
+
+        // Трасування підписів значень біля осі Y
+        routeAndDrawLabels(ctx, originX, allLabeledPoints);
+
+        // Легенда графіка
+        const legendX = originX + 20;
+        const legendY = endY - 25;
+        const legendGap = 200;
+
+        curves.forEach((curve, i) => {
+            const lx = legendX + i * legendGap;
+            ctx.strokeStyle = curve.color;
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(lx, legendY);
+            ctx.lineTo(lx + 24, legendY);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(lx + 12, legendY, 5, 0, Math.PI * 2);
+            ctx.fillStyle = curve.color;
+            ctx.fill();
+
+            ctx.fillStyle = themeColors.text;
+            ctx.font = 'bold 14px system-ui';
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(curve.label, lx + 32, legendY);
+        });
+
+        // Назва матеріалу внизу
+        ctx.fillStyle = themeColors.text;
         ctx.font = 'bold 22px system-ui';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'alphabetic';
-        ctx.fillText(chartName, plotCenterX, H - 24);
+        ctx.fillText(data.name, originX + (endX - originX) / 2, H - 24);
     }
 
-    nextBtn.addEventListener('click', addCurrentValue);
-    backBtn.addEventListener('click', stepBack);
-    fillDemoBtn.addEventListener('click', fillDemo);
+    function downloadSingleCanvas(idx) {
+        const canvas = document.getElementById(`chartCanvas_${idx}`);
+        const name = BASE_MATERIALS[idx].name.toLowerCase();
+        const link = document.createElement('a');
+        link.download = `variant_${currentVariant}_${name}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+    }
 
-    valueInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') addCurrentValue();
+    document.getElementById('downloadAllBtn').addEventListener('click', () => {
+        BASE_MATERIALS.forEach((_, idx) => {
+            setTimeout(() => downloadSingleCanvas(idx), idx * 220);
+        });
     });
 
-    updateUI();
-</script>
+    // Обробники розрахунку за варіантом
+    function handleCalculate() {
+        const variantInput = document.getElementById('variantInput');
+        const val = Number(variantInput.value);
+        const minVariant = Number(variantInput.min);
+        const maxVariant = Number(variantInput.max);
+        if (!Number.isInteger(val) || val < minVariant || val > maxVariant) {
+            alert(`Введіть цілий номер варіанта від ${minVariant} до ${maxVariant}.`);
+            return;
+        }
+        isManualMode = false;
+        performCalculations(val);
+        document.getElementById('variantCard').style.display = 'none';
+        document.getElementById('results').style.display = 'flex';
+        renderResults();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 
+    document.getElementById('calculateBtn').addEventListener('click', handleCalculate);
+    document.getElementById('variantInput').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') handleCalculate();
+    });
+
+    document.getElementById('recalcBtn').addEventListener('click', () => {
+        document.getElementById('results').style.display = 'none';
+        document.getElementById('variantCard').style.display = 'block';
+    });
+
+    document.getElementById('themeCheckbox').addEventListener('change', (e) => {
+        document.documentElement.dataset.theme = e.target.checked ? 'dark' : 'light';
+        if (document.getElementById('results').style.display === 'flex') {
+            renderResults();
+        }
+    });
+
+    // ================= РУЧНЕ ВВЕДЕННЯ ДАНИХ =================
+    const manualModal = document.getElementById('manualEntryModal');
+    const manualTablesWrapper = document.getElementById('manualTablesWrapper');
+
+    document.getElementById('openManualBtn').addEventListener('click', () => {
+        buildManualEntryTables();
+        manualModal.style.display = 'flex';
+    });
+
+    function closeManual() {
+        manualModal.style.display = 'none';
+    }
+
+    document.getElementById('closeManualBtn').addEventListener('click', closeManual);
+    document.getElementById('cancelManualBtn').addEventListener('click', closeManual);
+
+    function buildManualEntryTables() {
+        manualTablesWrapper.innerHTML = '';
+        
+        calculatedData.forEach((mat, mIdx) => {
+            const block = document.createElement('div');
+            block.style.marginBottom = '20px';
+            block.innerHTML = `<h4 style="margin-bottom: 8px;">${mIdx + 1}. ${mat.name} (${mat.unitC})</h4>`;
+
+            let tableHtml = `
+                <table class="manual-table">
+                    <thead>
+                        <tr>
+                            <th>Параметр</th>
+                            ${TEMPS.map(t => `<th>${t}°C</th>`).join('')}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>C</strong></td>
+                            ${mat.seriesC.map((v, i) => `<td><input type="number" step="any" data-mat="${mIdx}" data-type="c" data-idx="${i}" value="${v}"></td>`).join('')}
+                        </tr>
+                        <tr>
+                            <td><strong>tgδ</strong></td>
+                            ${mat.seriesTg.map((v, i) => `<td><input type="number" step="any" data-mat="${mIdx}" data-type="tg" data-idx="${i}" value="${v}"></td>`).join('')}
+                        </tr>
+                    </tbody>
+                </table>
+            `;
+            block.innerHTML += tableHtml;
+            manualTablesWrapper.appendChild(block);
+        });
+    }
+
+    document.getElementById('applyManualBtn').addEventListener('click', () => {
+        for (let m = 0; m < calculatedData.length; m++) {
+            const seriesC = [];
+            const seriesTg = [];
+            const seriesCtg = [];
+
+            for (let i = 0; i < TEMPS.length; i++) {
+                const cInp = document.querySelector(`input[data-mat="${m}"][data-type="c"][data-idx="${i}"]`);
+                const tgInp = document.querySelector(`input[data-mat="${m}"][data-type="tg"][data-idx="${i}"]`);
+
+                const cVal = parseFloat(cInp.value) || 0;
+                const tgVal = parseFloat(tgInp.value) || 0;
+
+                seriesC.push(cVal);
+                seriesTg.push(tgVal);
+                seriesCtg.push(cVal * tgVal);
+            }
+
+            calculatedData[m].seriesC = seriesC;
+            calculatedData[m].seriesTg = seriesTg;
+            calculatedData[m].seriesCtg = seriesCtg;
+        }
+
+        isManualMode = true;
+        closeManual();
+        document.getElementById('variantCard').style.display = 'none';
+        document.getElementById('results').style.display = 'flex';
+        renderResults();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Початковий розрахунок за замовчуванням
+    performCalculations(6);
+</script>
 </body>
 </html>

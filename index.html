@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Лабораторна робота №2 · Суміщені графіки C, tgδ, C·tgδ</title>
+    <title>Лабораторна робота №2-3 · Суміщені графіки C, tgδ, C·tgδ</title>
     <style>
         :root {
             --bg-color: #f8fafc;
@@ -12,8 +12,10 @@
             --input-bg: #ffffff;
             --primary: #087f6e;
             --primary-hover: #066657;
+            --primary-contrast: #ffffff;
             --secondary: #475569;
             --secondary-hover: #334155;
+            --secondary-contrast: #ffffff;
             --text-main: #0f172a;
             --text-muted: #64748b;
             --border: #cbd5e1;
@@ -31,8 +33,10 @@
             --input-bg: #0f172a;
             --primary: #2dd4bf;
             --primary-hover: #14b8a6;
-            --secondary: #64748b;
-            --secondary-hover: #94a3b8;
+            --primary-contrast: #0f172a;
+            --secondary: #475569;
+            --secondary-hover: #64748b;
+            --secondary-contrast: #f8fafc;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --border: #475569;
@@ -80,15 +84,11 @@
 
         .brand-mark {
             background: var(--primary);
-            color: #ffffff;
+            color: var(--primary-contrast);
             font-size: 1.1rem;
             font-weight: 700;
             padding: 6px 14px;
             border-radius: 8px;
-        }
-
-        :root[data-theme="dark"] .brand-mark {
-            color: #0f172a;
         }
 
         .brand-name {
@@ -159,24 +159,21 @@
             border-color: var(--primary);
         }
 
+        /* Кнопки за замовчуванням (Primary) */
         button {
             padding: 11px 20px;
             font-size: 0.95rem;
             font-weight: 600;
             background-color: var(--primary);
-            color: white;
-            border: none;
+            color: var(--primary-contrast);
+            border: 2px solid transparent;
             border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.2s, transform 0.05s;
+            transition: background-color 0.2s, color 0.2s, border-color 0.2s, transform 0.05s;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 6px;
-        }
-
-        :root[data-theme="dark"] button {
-            color: #0f172a;
         }
 
         button:hover {
@@ -187,23 +184,28 @@
             transform: scale(0.98);
         }
 
+        /* Вторинні кнопки (Secondary) */
         button.btn-secondary {
             background-color: var(--secondary);
-            color: #ffffff;
+            color: var(--secondary-contrast);
+            border-color: transparent;
         }
 
         button.btn-secondary:hover {
             background-color: var(--secondary-hover);
         }
 
+        /* Контурні кнопки (Outline) */
         button.btn-outline {
             background-color: transparent;
             color: var(--primary);
-            border: 2px solid var(--primary);
+            border-color: var(--primary);
         }
 
         button.btn-outline:hover {
             background-color: var(--surface-muted);
+            color: var(--primary-hover);
+            border-color: var(--primary-hover);
         }
 
         /* Ручний ввід даних */
@@ -360,7 +362,7 @@
 <div class="container">
     <header class="app-header">
         <div class="brand-lockup">
-            <span class="brand-mark">Лаб №2</span>
+            <span class="brand-mark">Лаб №2-3</span>
             <div>
                 <span class="brand-name">Дослідження поляризації та діелектричних втрат</span>
                 <span class="brand-detail">Суміщені графіки: C(t), tgδ(t) та C·tgδ(t)</span>
@@ -954,7 +956,6 @@
     const manualTablesWrapper = document.getElementById('manualTablesWrapper');
 
     document.getElementById('openManualBtn').addEventListener('click', () => {
-        // Якщо розрахунок ще не проводився, ініціалізуємо базовими даними
         if (!calculatedData || calculatedData.length === 0) {
             calculatedData = BASE_MATERIALS.map(mat => ({
                 name: mat.name,

@@ -206,6 +206,7 @@
             background-color: var(--surface-muted);
         }
 
+        /* Ручний ввід даних */
         #manualEntryModal {
             display: none;
             position: fixed;
@@ -268,6 +269,7 @@
             color: var(--text-main);
         }
 
+        /* Результати */
         #results {
             display: none;
             flex-direction: column;
@@ -458,7 +460,7 @@
     let calculatedData = [];
     let currentVariant = 6;
     let isManualMode = false;
-    let showCallouts = false; // За замовчуванням — без виносок (лише точки)
+    let showCallouts = false; // По стандарту — без виносок (лише точки)
 
     const SUPERSCRIPT_MAP = {
         '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴',
@@ -568,6 +570,7 @@
         });
     }
 
+    // Трасування та розведення міток без накладання
     function routeAndDrawLabels(ctx, originX, labeledPoints) {
         if (!labeledPoints || labeledPoints.length === 0) return;
 
@@ -579,6 +582,7 @@
             pt.targetY = pt.py;
         });
 
+        // Плавна релаксація висот
         for (let iter = 0; iter < 25; iter++) {
             for (let i = 0; i < N - 1; i++) {
                 if (sortedY[i + 1].targetY < sortedY[i].targetY + minSpacing) {
@@ -634,6 +638,7 @@
             const targetY = pt.targetY;
             const ptColor = pt.color;
 
+            // Засічка на осі Y
             ctx.strokeStyle = ptColor;
             ctx.lineWidth = 1.5;
             ctx.beginPath();
@@ -716,6 +721,7 @@
         ctx.lineTo(endX, originY);
         ctx.stroke();
 
+        // Стрілка X
         ctx.beginPath();
         ctx.moveTo(endX, originY);
         ctx.lineTo(endX - 14, originY - 6);
@@ -730,6 +736,7 @@
         ctx.lineTo(originX, arrowYTop);
         ctx.stroke();
 
+        // Стрілка Y
         ctx.beginPath();
         ctx.moveTo(originX, arrowYTop);
         ctx.lineTo(originX - 6, arrowYTop + 14);
@@ -820,10 +827,14 @@
                 ctx.stroke();
             });
 
-            // Виноски до осі Y (будуються лише коли ввімкнено)
+            // Виноски до осі Y (якщо увімкнено)
             if (showCallouts) {
-                const ptsToLabel = [points[0], points[4], points[8]];
-                ptsToLabel.forEach(pt => {
+                // Використовуємо дедуплікацію по висоті та значенню для цієї кривої, 
+                // щоб не було однакових підписів і задвоєнь на осі
+                const uniquePointsMap = new Map();
+
+                points.forEach(pt => {
+                    // Горизонтальний пунктир від точки до осі Y
                     ctx.strokeStyle = curve.color;
                     ctx.lineWidth = 1;
                     ctx.setLineDash([3, 3]);
@@ -833,12 +844,19 @@
                     ctx.stroke();
                     ctx.setLineDash([]);
 
-                    allLabeledPoints.push(pt);
+                    const key = `${pt.py.toFixed(1)}_${pt.text}`;
+                    if (!uniquePointsMap.has(key)) {
+                        uniquePointsMap.set(key, pt);
+                    }
+                });
+
+                uniquePointsMap.forEach(uniquePt => {
+                    allLabeledPoints.push(uniquePt);
                 });
             }
         });
 
-        // Трасування підписів біля осі Y
+        // Трасування підписів значень біля осі Y (якщо увімкнено)
         if (showCallouts) {
             routeAndDrawLabels(ctx, originX, allLabeledPoints);
         }
@@ -892,7 +910,7 @@
         });
     });
 
-    // Обробник кнопки показу / приховування виносок
+    // Перемикач виносок
     document.getElementById('toggleCalloutsBtn').addEventListener('click', () => {
         showCallouts = !showCallouts;
         const btn = document.getElementById('toggleCalloutsBtn');
@@ -900,7 +918,7 @@
         renderResults();
     });
 
-    // Розрахунок за варіантом
+    // Обробники розрахунку за варіантом
     function handleCalculate() {
         const variantInput = document.getElementById('variantInput');
         const val = Number(variantInput.value);
